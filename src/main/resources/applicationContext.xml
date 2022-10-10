@@ -18,10 +18,10 @@
 ">
 
     <!--    配置注解扫描-->
-    <context:component-scan base-package="com.ilovesshan.service"/>
+    <context:component-scan base-package="com.ilovesshan.service, com.ilovesshan.common"/>
 
     <!--    读取数据源-->
-    <context:property-placeholder location="classpath:jdbc.properties"/>
+    <context:property-placeholder ignore-unresolvable="true" location="classpath:jdbc.properties, classpath:redis.properties"/>
 
     <!--    配置 支持切面-->
     <aop:aspectj-autoproxy/>
@@ -54,6 +54,16 @@
 
         <!--        加载mapper文件-->
         <property name="mapperLocations" value="classpath:mapper/**/*.xml"/>
+    </bean>
+
+
+    <!--    配置redis-->
+    <bean id="jedisPool" class="redis.clients.jedis.JedisPool">
+        <constructor-arg name="host" value="${redis.host}"/>
+        <constructor-arg name="port" value="${redis.port}"/>
+        <property name="maxIdle" value="${redis.maxIdle}"/>
+        <property name="minIdle" value="${redis.minIdle}"/>
+        <property name="maxTotal" value="${redis.maxTotal}"/>
     </bean>
 
 </beans>
