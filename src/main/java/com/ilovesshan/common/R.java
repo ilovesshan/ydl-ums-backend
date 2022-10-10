@@ -24,7 +24,16 @@ public class R {
     public static final int ERROR_CODE_SERVER = 500;
 
     public static final String SUCCESS_MESSAGE = "操作成功";
+    public static final String SUCCESS_MESSAGE_select = "查询成功";
+    public static final String SUCCESS_MESSAGE_insert = "新增成功";
+    public static final String SUCCESS_MESSAGE_delete = "删除成功";
+    public static final String SUCCESS_MESSAGE_update = "更新成功";
+
     public static final String ERROR_MESSAGE = "操作失败";
+    public static final String ERROR_MESSAGE_select = "查询失败";
+    public static final String ERROR_MESSAGE_insert = "新增失败";
+    public static final String ERROR_MESSAGE_delete = "删除失败";
+    public static final String ERROR_MESSAGE_update = "更新失败";
 
     private Integer code;
     private String message;
@@ -35,8 +44,13 @@ public class R {
         return R.builder().code(R.SUCCESS_CODE).message(R.SUCCESS_MESSAGE).build();
     }
 
+
     public static R success(Object data) {
         return R.builder().code(R.SUCCESS_CODE).message(R.SUCCESS_MESSAGE).data(data).build();
+    }
+
+    public static R success(String message, Object data) {
+        return R.builder().code(R.SUCCESS_CODE).message(message).data(data).build();
     }
 
     public static R fail() {
@@ -44,7 +58,11 @@ public class R {
     }
 
     public static R fail(Object data) {
-        return R.builder().code(R.ERROR_CODE_CLIENT).message(R.SUCCESS_MESSAGE).data(data).build();
+        return R.builder().code(R.ERROR_CODE_CLIENT).message(R.ERROR_MESSAGE).data(data).build();
+    }
+
+    public static R fail(String message, Object data) {
+        return R.builder().code(R.ERROR_CODE_CLIENT).message(message).data(data).build();
     }
 
     public static R error() {
@@ -53,6 +71,10 @@ public class R {
 
     public static R error(Object data) {
         return R.builder().code(R.ERROR_CODE_SERVER).message(R.SUCCESS_MESSAGE).data(data).build();
+    }
+
+    public static R error(String message, Object data) {
+        return R.builder().code(R.ERROR_CODE_SERVER).message(message).data(data).build();
     }
 
 }
