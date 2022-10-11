@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+import javax.annotation.Resource;
+
 /**
  * Created with IntelliJ IDEA.
  *
@@ -18,10 +20,11 @@ import redis.clients.jedis.JedisPool;
 @Slf4j
 @Component
 public class RedisTemplate {
-    @Autowired
+
+    @Resource
     private JedisPool jedisPool;
 
-    @Autowired
+    @Resource
     private CustomObjectMapper objectMapper;
 
     /**

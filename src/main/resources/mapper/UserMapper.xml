@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ilovesshan.mapper.UserMapper">
+
+    <sql id="allColumns">
+        user_id,
+        user_id,
+        user_name,
+        nick_name,
+        email,
+        phonenumber,
+        sex,
+        avatar,
+        password,
+        status,
+        del_flag,
+        login_ip,
+        login_date,
+        create_by,
+        create_time,
+        update_by,
+        update_time
+    </sql>
+
+    <select id="selectUserByName" resultType="ydlUser">
+        select
+            <include refid="allColumns"/>
+        from
+            ydl_user
+        where
+            `user_name` like #{username}
+    </select>
+
+</mapper>

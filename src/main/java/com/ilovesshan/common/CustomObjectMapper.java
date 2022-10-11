@@ -1,5 +1,6 @@
 package com.ilovesshan.common;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -30,7 +31,7 @@ public class CustomObjectMapper extends ObjectMapper {
         // 设置输入:禁止把POJO中值为null的字段映射到json字符串中
         configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
         // 空值不序列化
-        // setSerializationInclusion(JsonInclude.Include.NON_NULL);
+         setSerializationInclusion(JsonInclude.Include.NON_NULL);
         // 反序列化时，属性不存在的兼容处理
         getDeserializationConfig().withoutFeatures(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         // 序列化枚举是以toString()来输出，默认false，即默认以name()来输出

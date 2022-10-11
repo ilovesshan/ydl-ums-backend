@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -24,11 +25,11 @@ public class YdlUser implements Serializable {
   private String status;
   private String delFlag;
   private String loginIp;
-  private java.sql.Timestamp loginDate;
+  private Date loginDate;
   private String createBy;
-  private java.sql.Timestamp createTime;
+  private Date createTime;
   private String updateBy;
-  private java.sql.Timestamp updateTime;
+  private Date updateTime;
 
 
 }
