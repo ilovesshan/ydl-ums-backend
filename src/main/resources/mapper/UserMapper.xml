@@ -7,7 +7,7 @@
     <sql id="allColumns">
         user_id,
         user_id,
-        user_name,
+        username,
         nick_name,
         email,
         phonenumber,
@@ -30,7 +30,7 @@
         from
             ydl_user
         where
-            `user_name` like #{username}
+            `username` like #{username}
     </select>
 
 </mapper>

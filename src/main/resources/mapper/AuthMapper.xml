@@ -5,8 +5,8 @@
 <mapper namespace="com.ilovesshan.mapper.AuthMapper">
     <insert id="insert" parameterType="ydlUserLogin" useGeneratedKeys="true" keyProperty="loginId" keyColumn="login_id">
         INSERT INTO
-            `ydl`.`ydl_user_login_log` (`login_id`, `user_id`, `token`, `user_name`, `login_ip`, `login_time`, `login_localtion`, `browser`, `system_os`)
+            `ydl`.`ydl_user_login_log` (`login_id`, `user_id`, `token`, `username`, `login_ip`, `login_time`, `login_localtion`, `browser`, `system_os`)
         VALUES
-             (NULL, #{userId}, #{token}, #{userName}, #{loginIp}, #{loginTime}, #{loginLocaltion}, #{browser}, #{systemOs});
+             (NULL, #{userId}, #{token}, #{username}, #{loginIp}, #{loginTime}, #{loginLocaltion}, #{browser}, #{systemOs});
     </insert>
 </mapper>

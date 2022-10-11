@@ -84,7 +84,7 @@ public class AuthServiceImpl implements AuthService {
         String token = UUID.randomUUID().toString().replace("-", "");
         YdlUserLogin userLogin = YdlUserLogin.builder()
                 .token(token)
-                .userName(username)
+                .username(username)
                 .loginId(ydlUser.getUserId())
                 .loginTime(new Date())
                 .userId(ydlUser.getUserId())

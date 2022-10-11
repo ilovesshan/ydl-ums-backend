@@ -15,7 +15,7 @@ public class YdlUser implements Serializable {
   private static final long serialVersionUID = 4291250707494907157L;
 
   private long userId;
-  private String userName;
+  private String username;
   private String nickName;
   private String email;
   private String phonenumber;

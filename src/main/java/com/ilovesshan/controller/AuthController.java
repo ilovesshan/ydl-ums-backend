@@ -24,6 +24,7 @@ import javax.annotation.Resource;
 @Controller
 public class AuthController {
 
+
     @Resource
     private AuthService authService;
 
@@ -31,7 +32,7 @@ public class AuthController {
     @ResponseBody
     public R login(@RequestBody YdlUser ydlUser) {
         String password = ydlUser.getPassword();
-        String userName = ydlUser.getUserName();
+        String userName = ydlUser.getUsername();
         if (password == null || userName == null) {
             return R.fail("用户名或密码不能为空", null);
         }

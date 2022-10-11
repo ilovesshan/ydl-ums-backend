@@ -20,7 +20,7 @@ public class YdlUserLogin implements Serializable {
     private long loginId;
     private long userId;
     private String token;
-    private String userName;
+    private String username;
     private String loginIp;
     private Date loginTime;
     private String loginLocaltion;
