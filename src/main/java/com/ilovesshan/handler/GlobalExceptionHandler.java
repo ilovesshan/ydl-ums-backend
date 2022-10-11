@@ -1,4 +1,4 @@
-package com.ilovesshan.common;
+package com.ilovesshan.handler;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
 
@@ -12,5 +12,4 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-
 }

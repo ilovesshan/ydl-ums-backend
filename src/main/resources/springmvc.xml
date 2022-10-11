@@ -78,20 +78,21 @@
     <!--    <mvc:resources mapping="/css/**" location="/static/css/"/>-->
     <!--    <mvc:resources mapping="/images/**" location="/static/images/"/>-->
 
-    <!--    配置拦截器-->
-    <!--    <mvc:interceptors>-->
-    <!--        <mvc:interceptor>-->
-    <!--            <mvc:mapping path="/**"/>-->
-    <!--            <mvc:exclude-mapping path="/login"/>-->
-    <!--            <mvc:exclude-mapping path="/**/*.css"/>-->
-    <!--            <mvc:exclude-mapping path="/**/*.js"/>-->
-    <!--            <mvc:exclude-mapping path="/**/*.png"/>-->
-    <!--            <mvc:exclude-mapping path="/**/*.gif"/>-->
-    <!--            <mvc:exclude-mapping path="/**/*.jpg"/>-->
-    <!--            <mvc:exclude-mapping path="/**/*.jpeg"/>-->
-    <!--            <bean class="com.ilovesshan.interceptor.LoginInterceptor"/>-->
-    <!--        </mvc:interceptor>-->
-    <!--    </mvc:interceptors>-->
+
+    <!--        配置拦截器-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <!--            <mvc:exclude-mapping path="ums/login"/>-->
+            <!--            <mvc:exclude-mapping path="/**/*.css"/>-->
+            <!--            <mvc:exclude-mapping path="/**/*.js"/>-->
+            <!--            <mvc:exclude-mapping path="/**/*.png"/>-->
+            <!--            <mvc:exclude-mapping path="/**/*.gif"/>-->
+            <!--            <mvc:exclude-mapping path="/**/*.jpg"/>-->
+            <!--            <mvc:exclude-mapping path="/**/*.jpeg"/>-->
+            <bean class="com.ilovesshan.interceptor.AuthHandlerInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
 
     <!--    配置 视图控制器-->
     <mvc:view-controller path="/" view-name="index"/>

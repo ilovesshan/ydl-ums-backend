@@ -2,7 +2,7 @@ package com.ilovesshan.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.ilovesshan.common.CustomObjectMapper;
+import com.ilovesshan.handler.CustomObjectMapper;
 import com.ilovesshan.common.R;
 import com.ilovesshan.common.RedisTemplate;
 import com.ilovesshan.constant.YdlConstants;

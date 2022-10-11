@@ -1,4 +1,4 @@
-package com.ilovesshan.common;
+package com.ilovesshan.handler;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;

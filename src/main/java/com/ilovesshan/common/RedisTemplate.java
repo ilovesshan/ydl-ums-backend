@@ -1,8 +1,8 @@
 package com.ilovesshan.common;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.ilovesshan.handler.CustomObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;

@@ -43,4 +43,11 @@ public class AuthController {
             return R.error(e.getMessage(), null);
         }
     }
+
+
+    @PostMapping("/test")
+    @ResponseBody
+    public R test() {
+        return R.fail();
+    }
 }
