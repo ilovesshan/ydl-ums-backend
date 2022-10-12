@@ -47,7 +47,7 @@ public class AuthController {
 
     @PostMapping("/register")
     @ResponseBody
-    public R logout(@RequestBody YdlUser ydlUser) {
+    public R register(@RequestBody YdlUser ydlUser) {
         String password = ydlUser.getPassword();
         String userName = ydlUser.getUsername();
         if (password == null || userName == null) {

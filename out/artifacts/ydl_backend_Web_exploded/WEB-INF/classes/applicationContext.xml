@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context
+            https://www.springframework.org/schema/context/spring-context.xsd
+            http://www.springframework.org/schema/aop
+            https://www.springframework.org/schema/aop/spring-aop.xsd
+            http://www.springframework.org/schema/tx
+            http://www.springframework.org/schema/tx/spring-tx.xsd
+            http://mybatis.org/schema/mybatis-spring
+            http://mybatis.org/schema/mybatis-spring.xsd
+">
+
+    <!--    配置注解扫描-->
+    <context:component-scan base-package=" com.ilovesshan.service, com.ilovesshan.common, com.ilovesshan.handler"/>
+
+    <!--    读取数据源-->
+    <context:property-placeholder ignore-unresolvable="true" location="classpath:jdbc.properties, classpath:redis.properties"/>
+
+    <!--    配置 支持切面-->
+    <aop:aspectj-autoproxy/>
+
+    <!--    配置支持注解式 事务-->
+    <tx:annotation-driven/>
+
+    <!--    配置mybatis 注解扫描-->
+    <mybatis:scan base-package="com.ilovesshan.mapper"/>
+
+    <!--    配置数据源-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+
+    <!--    配置事务管理器-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+
+    <!--    配置 SqlSessionFactoryBean-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <!--        加载mybatis配置文件-->
+        <property name="configLocation" value="classpath:mybatis.xml"/>
+
+        <!--        加载mapper文件-->
+        <property name="mapperLocations" value="classpath:mapper/**/*.xml"/>
+    </bean>
+
+
+    <!--    配置redis-->
+    <bean id="jedisPool" class="redis.clients.jedis.JedisPool">
+        <constructor-arg name="host" value="${redis.host}"/>
+        <constructor-arg name="port" value="${redis.port}"/>
+        <property name="maxIdle" value="${redis.maxIdle}"/>
+        <property name="minIdle" value="${redis.minIdle}"/>
+        <property name="maxTotal" value="${redis.maxTotal}"/>
+    </bean>
+
+</beans>
