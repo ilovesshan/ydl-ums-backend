@@ -8,6 +8,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 import javax.annotation.Resource;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -124,6 +125,27 @@ public class RedisTemplate {
         return executorValue;
     }
 
+    /**
+     * 对key进行延时
+     *
+     * @param key    键
+     * @param expire 延时事件
+     * @return
+     */
+    public long expire(String key, Long expire) {
+        Jedis jedis = jedisPool.getResource();
+        long l = 0L;
+        try {
+            // 设置成功返回 1 。 当 key 不存在或者不能为 key 设置过期时间时(比如在低于 2.1.3 版本的 Redis 中你尝试更新 key 的过期时间)返回 0 。
+            l = jedis.expire(key, expire);
+        } catch (Exception e) {
+            log.error("redis  executor error: ", e);
+            jedisPool.returnBrokenResource(jedis);
+        } finally {
+            jedisPool.returnResource(jedis);
+        }
+        return l;
+    }
 
     /**
      * 删除 数据
@@ -143,5 +165,25 @@ public class RedisTemplate {
             jedisPool.returnResource(jedis);
         }
         return del;
+    }
+
+    /**
+     * 获取 keys
+     *
+     * @param pattern 表达式
+     * @return
+     */
+    public Set<String> keys(String pattern) {
+        Jedis jedis = jedisPool.getResource();
+        Set<String> keys = null;
+        try {
+            keys = jedis.keys(pattern);
+        } catch (Exception e) {
+            log.error("redis  executor error: ", e);
+            jedisPool.returnBrokenResource(jedis);
+        } finally {
+            jedisPool.returnResource(jedis);
+        }
+        return keys;
     }
 }

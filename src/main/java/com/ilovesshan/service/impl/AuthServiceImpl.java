@@ -20,10 +20,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -97,8 +94,15 @@ public class AuthServiceImpl implements AuthService {
         // 将用户登录日志存在数据库中
         authMapper.insert(userLogin);
 
-        // 将用户信息存在 redis中
-        redisTemplate.setObject(YdlConstants.TOKEN_PREFIX + token, userLogin, YdlConstants.TOKEN_EXPIRE);
+
+        // 查看 redis中是否存在该用户记录的信息
+        Set<String> keys = redisTemplate.keys(YdlConstants.TOKEN_PREFIX + username + "*");
+        // 存在，则不能登录(避免多人同时在线)
+        if (!keys.isEmpty()) {
+            return R.fail("该账号在其他地方登录，请稍后再试", null);
+        }
+        //不存在, 可以登录,将用户信息存在 redis中
+        redisTemplate.setObject(YdlConstants.TOKEN_PREFIX + username + ":" + token, userLogin, YdlConstants.TOKEN_EXPIRE);
 
         // 将登录信息和用户信息返回给用户
         userLogin.setYdlUser(ydlUser);
@@ -115,7 +119,8 @@ public class AuthServiceImpl implements AuthService {
     public R logout() {
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
         String authorization = request.getHeader("Authorization");
-        redisTemplate.remove(YdlConstants.TOKEN_PREFIX + authorization);
+        String username = request.getHeader("username");
+        redisTemplate.remove(YdlConstants.TOKEN_PREFIX + username + ":" + authorization);
         return R.success("退出成功", null);
     }
 }

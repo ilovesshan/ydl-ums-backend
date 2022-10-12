@@ -38,6 +38,7 @@ public class AuthHandlerInterceptor implements HandlerInterceptor {
         List<String> list = Arrays.asList("/ums/login", "/ums/register");
         if (!list.contains(request.getRequestURI())) {
             String authorization = request.getHeader("Authorization");
+            String username = request.getHeader("username");
             // token 不存在
             if (authorization == null || "".equals(authorization)) {
                 response.setStatus(301);
@@ -46,13 +47,16 @@ public class AuthHandlerInterceptor implements HandlerInterceptor {
             }
 
             // 根据token去redis中查
-            YdlUserLogin user = redisTemplate.getObject(YdlConstants.TOKEN_PREFIX + authorization, new TypeReference<YdlUserLogin>() {
-            });
+            String key = YdlConstants.TOKEN_PREFIX + username + ":" + authorization;
+            YdlUserLogin user = redisTemplate.getObject(key, new TypeReference<YdlUserLogin>() {});
             if (user == null) {
                 response.setStatus(301);
                 response.getWriter().print(objectMapper.writeValueAsString(responseEx));
                 return false;
             }
+
+            // 给token延时
+            redisTemplate.expire(key, YdlConstants.TOKEN_EXPIRE);
         }
         return true;
     }
