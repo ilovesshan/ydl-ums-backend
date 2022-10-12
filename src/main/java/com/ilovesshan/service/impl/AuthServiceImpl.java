@@ -74,7 +74,8 @@ public class AuthServiceImpl implements AuthService {
         String body = result.getBody();
         Map<String, String> map = null;
         try {
-            map = objectMapper.readValue(body, new TypeReference<Map<String, String>>() {});
+            map = objectMapper.readValue(body, new TypeReference<Map<String, String>>() {
+            });
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -107,5 +108,14 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public R register(String username, String password) {
         return null;
+    }
+
+
+    @Override
+    public R logout() {
+        HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
+        String authorization = request.getHeader("Authorization");
+        redisTemplate.remove(YdlConstants.TOKEN_PREFIX + authorization);
+        return R.success("退出成功", null);
     }
 }

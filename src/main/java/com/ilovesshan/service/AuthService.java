@@ -14,5 +14,7 @@ import com.ilovesshan.common.R;
 public interface AuthService {
     R login(String username, String password) throws JsonProcessingException;
 
-    R register(String username, String password) throws JsonProcessingException;
+    R register(String username, String password);
+
+    R logout();
 }

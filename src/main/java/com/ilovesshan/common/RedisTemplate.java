@@ -123,4 +123,25 @@ public class RedisTemplate {
         }
         return executorValue;
     }
+
+
+    /**
+     * 删除 数据
+     *
+     * @param keys 键列表
+     * @return
+     */
+    public long remove(String... keys) {
+        Jedis jedis = jedisPool.getResource();
+        long del = 0L;
+        try {
+            del = jedis.del(keys);
+        } catch (Exception e) {
+            log.error("redis  executor error: ", e);
+            jedisPool.returnBrokenResource(jedis);
+        } finally {
+            jedisPool.returnResource(jedis);
+        }
+        return del;
+    }
 }

@@ -45,9 +45,21 @@ public class AuthController {
     }
 
 
-    @PostMapping("/test")
+    @PostMapping("/register")
     @ResponseBody
-    public R test() {
-        return R.fail();
+    public R logout(@RequestBody YdlUser ydlUser) {
+        String password = ydlUser.getPassword();
+        String userName = ydlUser.getUsername();
+        if (password == null || userName == null) {
+            return R.fail("用户名或密码不能为空", null);
+        }
+        return authService.register(userName, password);
+    }
+
+
+    @PostMapping("/logout")
+    @ResponseBody
+    public R logout() {
+        return authService.logout();
     }
 }
