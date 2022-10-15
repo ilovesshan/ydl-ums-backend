@@ -33,17 +33,18 @@ public class AuthHandlerInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        R responseEx = R.fail("暂无访问/操作权限", null);
+        R responseExNoToken = R.fail("暂无访问/操作权限", null);
+        R responseExNoAuth = R.fail("该账号可能处于异地登录状态，请重新登录再试", null);
         response.setContentType("application/json;charset=utf-8");
         // 添加白名单
-        List<String> list = Arrays.asList("/ums/login", "/ums/register");
+        List<String> list = Arrays.asList("/ums/login", "/ums/logout", "/ums/register");
         if (!list.contains(request.getRequestURI())) {
             String authorization = request.getHeader("Authorization");
             String username = request.getHeader("username");
             // token 不存在
             if (authorization == null || "".equals(authorization)) {
                 response.setStatus(301);
-                response.getWriter().print(objectMapper.writeValueAsString(responseEx));
+                response.getWriter().print(objectMapper.writeValueAsString(responseExNoToken));
                 return false;
             }
 
@@ -53,11 +54,11 @@ public class AuthHandlerInterceptor implements HandlerInterceptor {
             });
             if (user == null) {
                 response.setStatus(301);
-                response.getWriter().print(objectMapper.writeValueAsString(responseEx));
+                response.getWriter().print(objectMapper.writeValueAsString(responseExNoAuth));
                 return false;
             }
 
-            // 给token延时
+            // 给token延时(重新设置过期时间)
             redisTemplate.expire(key, YdlConstants.TOKEN_EXPIRE);
         }
         return true;

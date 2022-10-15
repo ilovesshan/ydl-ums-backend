@@ -1,5 +1,6 @@
 package com.ilovesshan.controller;
 
+import com.ilovesshan.common.R;
 import com.ilovesshan.pojo.YdlUser;
 import com.ilovesshan.service.YdlUserService;
 import org.springframework.data.domain.Page;
@@ -27,13 +28,13 @@ public class YdlUserController {
     /**
      * 分页查询
      *
-     * @param ydlUser 筛选条件
+     * @param ydlUser  筛选条件
      * @param pageNum  分页页数
      * @param pageSize 分页条数
      * @return 查询结果
      */
     @GetMapping
-    public ResponseEntity<Page<YdlUser>> queryByPage(YdlUser ydlUser,  @RequestParam("pageSize") Integer pageSize, @RequestParam("pageNum") Integer pageNum) {
+    public ResponseEntity<Page<YdlUser>> queryByPage(YdlUser ydlUser, @RequestParam("pageSize") Integer pageSize, @RequestParam("pageNum") Integer pageNum) {
         return ResponseEntity.ok(this.ydlUserService.queryByPage(ydlUser, PageRequest.of(pageNum - 1, pageSize)));
     }
 
@@ -44,8 +45,8 @@ public class YdlUserController {
      * @return 单条数据
      */
     @GetMapping("/{id}")
-    public ResponseEntity<YdlUser> queryById(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(this.ydlUserService.queryById(id));
+    public R queryById(@PathVariable("id") Long id) {
+        return R.success(R.SUCCESS_MESSAGE_select, this.ydlUserService.queryById(id));
     }
 
     /**

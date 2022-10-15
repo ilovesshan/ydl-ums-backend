@@ -9,7 +9,7 @@ package com.ilovesshan.constant;
  */
 public class YdlConstants {
     public static final String TOKEN_PREFIX = "token:";
-    public static final Long TOKEN_EXPIRE = 30 * 60L;
+    public static final Long TOKEN_EXPIRE = 10 * 60L;
     public static final String ROLE_PREFIX = "role:";
     public static final String PERMISSION_PREFIX = "permission:";
 }

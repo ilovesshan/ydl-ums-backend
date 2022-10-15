@@ -4,7 +4,7 @@
 
     <resultMap type="com.ilovesshan.pojo.YdlUser" id="YdlUserMap">
         <result property="userId" column="user_id" jdbcType="INTEGER"/>
-        <result property="username" column="user_name" jdbcType="VARCHAR"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
         <result property="nickName" column="nick_name" jdbcType="VARCHAR"/>
         <result property="email" column="email" jdbcType="VARCHAR"/>
         <result property="phonenumber" column="phonenumber" jdbcType="VARCHAR"/>
@@ -53,7 +53,7 @@
     <!--查询单个-->
     <select id="queryById" resultMap="YdlUserMap">
         select
-          user_id, user_name, nick_name, email, phonenumber, sex, avatar, password, status, del_flag, login_ip, login_date, create_by, create_time, update_by, update_time
+          user_id, username, nick_name, email, phonenumber, sex, avatar, password, status, del_flag, login_ip, login_date, create_by, create_time, update_by, update_time
         from ydl_user
         where user_id = #{userId}
     </select>
@@ -61,14 +61,14 @@
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="YdlUserMap">
         select
-          user_id, user_name, nick_name, email, phonenumber, sex, avatar, password, status, del_flag, login_ip, login_date, create_by, create_time, update_by, update_time
+          user_id, username, nick_name, email, phonenumber, sex, avatar, password, status, del_flag, login_ip, login_date, create_by, create_time, update_by, update_time
         from ydl_user
         <where>
             <if test="ydlUser.userId != null">
                 and user_id = #{ydlUser.userId}
             </if>
             <if test="ydlUser.userName != null and ydlUser.userName != ''">
-                and user_name = #{ydlUser.userName}
+                and username = #{ydlUser.userName}
             </if>
             <if test="ydlUser.nickName != null and ydlUser.nickName != ''">
                 and nick_name = #{ydlUser.nickName}
@@ -125,7 +125,7 @@
                 and user_id = #{userId}
             </if>
             <if test="userName != null and userName != ''">
-                and user_name = #{userName}
+                and username = #{userName}
             </if>
             <if test="nickName != null and nickName != ''">
                 and nick_name = #{nickName}
@@ -174,12 +174,12 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="userId" useGeneratedKeys="true">
-        insert into ydl_user(user_name, nick_name, email, phonenumber, sex, avatar, password, status, del_flag, login_ip, login_date, create_by, create_time, update_by, update_time)
+        insert into ydl_user(username, nick_name, email, phonenumber, sex, avatar, password, status, del_flag, login_ip, login_date, create_by, create_time, update_by, update_time)
         values (#{userName}, #{nickName}, #{email}, #{phonenumber}, #{sex}, #{avatar}, #{password}, #{status}, #{delFlag}, #{loginIp}, #{loginDate}, #{createBy}, #{createTime}, #{updateBy}, #{updateTime})
     </insert>
 
     <insert id="insertBatch" keyProperty="userId" useGeneratedKeys="true">
-        insert into ydl_user(user_name, nick_name, email, phonenumber, sex, avatar, password, status, del_flag, login_ip, login_date, create_by, create_time, update_by, update_time)
+        insert into ydl_user(username, nick_name, email, phonenumber, sex, avatar, password, status, del_flag, login_ip, login_date, create_by, create_time, update_by, update_time)
         values
         <foreach collection="entities" item="entity" separator=",">
         (#{entity.userName}, #{entity.nickName}, #{entity.email}, #{entity.phonenumber}, #{entity.sex}, #{entity.avatar}, #{entity.password}, #{entity.status}, #{entity.delFlag}, #{entity.loginIp}, #{entity.loginDate}, #{entity.createBy}, #{entity.createTime}, #{entity.updateBy}, #{entity.updateTime})
@@ -187,13 +187,13 @@
     </insert>
 
     <insert id="insertOrUpdateBatch" keyProperty="userId" useGeneratedKeys="true">
-        insert into ydl_user(user_name, nick_name, email, phonenumber, sex, avatar, password, status, del_flag, login_ip, login_date, create_by, create_time, update_by, update_time)
+        insert into ydl_user(username, nick_name, email, phonenumber, sex, avatar, password, status, del_flag, login_ip, login_date, create_by, create_time, update_by, update_time)
         values
         <foreach collection="entities" item="entity" separator=",">
             (#{entity.userName}, #{entity.nickName}, #{entity.email}, #{entity.phonenumber}, #{entity.sex}, #{entity.avatar}, #{entity.password}, #{entity.status}, #{entity.delFlag}, #{entity.loginIp}, #{entity.loginDate}, #{entity.createBy}, #{entity.createTime}, #{entity.updateBy}, #{entity.updateTime})
         </foreach>
         on duplicate key update
-        user_name = values(user_name),
+        username = values(username),
         nick_name = values(nick_name),
         email = values(email),
         phonenumber = values(phonenumber),
@@ -215,7 +215,7 @@
         update ydl_user
         <set>
             <if test="userName != null and userName != ''">
-                user_name = #{userName},
+                username = #{userName},
             </if>
             <if test="nickName != null and nickName != ''">
                 nick_name = #{nickName},

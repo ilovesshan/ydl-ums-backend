@@ -115,7 +115,9 @@ public class RedisTemplate {
         T executorValue = null;
         try {
             String value = jedis.get(key);
-            executorValue = objectMapper.readValue(value, clazz);
+            if (value != null) {
+                executorValue = objectMapper.readValue(value, clazz);
+            }
         } catch (Exception e) {
             log.error("redis  executor error: ", e);
             jedisPool.returnBrokenResource(jedis);
