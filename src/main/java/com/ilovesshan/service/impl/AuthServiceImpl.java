@@ -7,11 +7,14 @@ import com.ilovesshan.common.R;
 import com.ilovesshan.common.RedisTemplate;
 import com.ilovesshan.constant.YdlConstants;
 import com.ilovesshan.mapper.AuthMapper;
+import com.ilovesshan.pojo.YdlAuth;
+import com.ilovesshan.pojo.YdlRole;
 import com.ilovesshan.pojo.YdlUser;
 import com.ilovesshan.pojo.YdlUserLogin;
 import com.ilovesshan.service.AuthService;
-import com.ilovesshan.service.UserService;
+import com.ilovesshan.service.YdlUserService;
 import eu.bitwalker.useragentutils.UserAgent;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -21,6 +24,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created with IntelliJ IDEA.
@@ -31,10 +35,11 @@ import java.util.*;
  */
 
 @Service
+@Slf4j
 public class AuthServiceImpl implements AuthService {
 
     @Resource
-    private UserService userService;
+    private YdlUserService userService;
 
     @Resource
     private AuthMapper authMapper;
@@ -80,29 +85,21 @@ public class AuthServiceImpl implements AuthService {
 
         // 生成token 组装用户登录信息
         String token = UUID.randomUUID().toString().replace("-", "");
-        YdlUserLogin userLogin = YdlUserLogin.builder()
-                .token(token)
-                .username(username)
-                .loginId(ydlUser.getUserId())
-                .loginTime(new Date())
-                .userId(ydlUser.getUserId())
-                .systemOs(userAgent.getOperatingSystem().toString())
-                .browser(userAgent.getBrowser().toString())
-                .loginIp(request.getRemoteAddr())
-                .loginLocaltion(location)
-                .build();
+        YdlUserLogin userLogin = YdlUserLogin.builder().token(token).username(username).loginId(ydlUser.getUserId()).loginTime(new Date()).userId(ydlUser.getUserId()).systemOs(userAgent.getOperatingSystem().toString()).browser(userAgent.getBrowser().toString()).loginIp(request.getRemoteAddr()).loginLocaltion(location).build();
         // 将用户登录日志存在数据库中
         authMapper.insert(userLogin);
 
 
         // 查看 redis中是否存在该用户记录的信息
         Set<String> keys = redisTemplate.keys(YdlConstants.TOKEN_PREFIX + username + "*");
-        // 存在，则不能登录(避免多人同时在线)
-        if (!keys.isEmpty()) {
-            return R.fail("该账号在其他地方登录，请稍后再试", null);
-        }
-        //不存在, 可以登录,将用户信息存在 redis中
-        redisTemplate.setObject(YdlConstants.TOKEN_PREFIX + username + ":" + token, userLogin, YdlConstants.TOKEN_EXPIRE);
+         // 存在，则不能登录(避免多人同时在线)
+        
+         if (!keys.isEmpty()) {
+             return R.fail("该账号在其他地方登录，请稍后再试", null);
+         }
+
+        // 不存在, 可以登录,将用户信息存在 redis中
+         redisTemplate.setObject(YdlConstants.TOKEN_PREFIX + username + ":" + token, userLogin, YdlConstants.TOKEN_EXPIRE);
 
         // 将登录信息和用户信息返回给用户
         userLogin.setYdlUser(ydlUser);
@@ -122,5 +119,44 @@ public class AuthServiceImpl implements AuthService {
         String username = request.getHeader("username");
         redisTemplate.remove(YdlConstants.TOKEN_PREFIX + username + ":" + authorization);
         return R.success("退出成功", null);
+    }
+
+    @Override
+    public R permission(Long userId) {
+        YdlAuth permission = authMapper.permission(userId);
+
+        // 将角色信息和权限信息放到redis中
+        // 角色信息:    role:token = [admin, xxx, xxx]
+        // 权限信息:    permission:token = [/system-management/menu-management, /home, xxx]
+
+
+        HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
+        String authorization = request.getHeader("Authorization");
+
+        String roleKey = YdlConstants.ROLE_PREFIX + authorization;
+        String permissionKey = YdlConstants.PERMISSION_PREFIX + authorization;
+
+        // 角色列表
+        List<String> roles = permission.getYdlRoles().stream().map(YdlRole::getRoleName).collect(Collectors.toList());
+
+        List<String> permissions = new ArrayList<>();
+        // 权限列表
+        permission.getYdlRoles().forEach(role -> role.getYdlMenus().forEach(menu -> permissions.add(menu.getPath())));
+
+        redisTemplate.setObject(roleKey, roles, YdlConstants.TOKEN_EXPIRE);
+        redisTemplate.setObject(permissionKey, permissions, YdlConstants.TOKEN_EXPIRE);
+
+
+        HashMap<String, Object> data = new HashMap<>();
+
+
+        HashMap<String, List<String>> rolesAndPermissions = new HashMap<>();
+        rolesAndPermissions.put("roles", roles);
+        rolesAndPermissions.put("permissions", permissions);
+
+        data.put("permission", permission);
+        data.put("rolesAndPermissions", rolesAndPermissions);
+
+        return R.success("获取成功", data);
     }
 }

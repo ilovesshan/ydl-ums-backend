@@ -17,4 +17,6 @@ public interface AuthService {
     R register(String username, String password);
 
     R logout();
+
+    R permission(Long userId);
 }

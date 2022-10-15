@@ -34,6 +34,7 @@ public class AuthHandlerInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         R responseEx = R.fail("暂无访问/操作权限", null);
+        response.setContentType("application/json;charset=utf-8");
         // 添加白名单
         List<String> list = Arrays.asList("/ums/login", "/ums/register");
         if (!list.contains(request.getRequestURI())) {
@@ -48,7 +49,8 @@ public class AuthHandlerInterceptor implements HandlerInterceptor {
 
             // 根据token去redis中查
             String key = YdlConstants.TOKEN_PREFIX + username + ":" + authorization;
-            YdlUserLogin user = redisTemplate.getObject(key, new TypeReference<YdlUserLogin>() {});
+            YdlUserLogin user = redisTemplate.getObject(key, new TypeReference<YdlUserLogin>() {
+            });
             if (user == null) {
                 response.setStatus(301);
                 response.getWriter().print(objectMapper.writeValueAsString(responseEx));

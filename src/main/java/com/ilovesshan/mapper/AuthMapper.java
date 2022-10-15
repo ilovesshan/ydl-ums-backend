@@ -1,5 +1,6 @@
 package com.ilovesshan.mapper;
 
+import com.ilovesshan.pojo.YdlAuth;
 import com.ilovesshan.pojo.YdlUserLogin;
 
 /**
@@ -12,4 +13,6 @@ import com.ilovesshan.pojo.YdlUserLogin;
 
 public interface AuthMapper {
     int insert(YdlUserLogin userLogin);
+
+    YdlAuth permission(Long userId);
 }
