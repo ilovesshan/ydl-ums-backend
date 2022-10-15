@@ -1,6 +1,6 @@
 package com.ilovesshan.service.impl;
 
-import com.ilovesshan.interceptor.mapper.UserMapper;
+import com.ilovesshan.mapper.UserMapper;
 import com.ilovesshan.pojo.YdlUser;
 import com.ilovesshan.service.UserService;
 import org.springframework.stereotype.Service;

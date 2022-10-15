@@ -6,7 +6,7 @@ import com.ilovesshan.handler.CustomObjectMapper;
 import com.ilovesshan.common.R;
 import com.ilovesshan.common.RedisTemplate;
 import com.ilovesshan.constant.YdlConstants;
-import com.ilovesshan.interceptor.mapper.AuthMapper;
+import com.ilovesshan.mapper.AuthMapper;
 import com.ilovesshan.pojo.YdlUser;
 import com.ilovesshan.pojo.YdlUserLogin;
 import com.ilovesshan.service.AuthService;

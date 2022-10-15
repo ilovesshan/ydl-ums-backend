@@ -1,4 +1,4 @@
-package com.ilovesshan.interceptor.mapper;
+package com.ilovesshan.mapper;
 
 import com.ilovesshan.pojo.YdlUserLogin;
 
