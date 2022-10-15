@@ -93,7 +93,7 @@ public class AuthServiceImpl implements AuthService {
         // 查看 redis中是否存在该用户记录的信息
         Set<String> keys = redisTemplate.keys(YdlConstants.TOKEN_PREFIX + username + "*");
          // 存在，则不能登录(避免多人同时在线)
-        
+
          if (!keys.isEmpty()) {
              return R.fail("该账号在其他地方登录，请稍后再试", null);
          }
