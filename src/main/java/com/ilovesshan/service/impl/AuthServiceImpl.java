@@ -128,7 +128,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public R permission(Long userId) {
-        YdlAuth permission = authMapper.permission(userId);
+        YdlAuth rolesAndPermissions = authMapper.permission(userId);
 
         // 将角色信息和权限信息放到redis中
         // 角色信息:    role:token = [admin, xxx, xxx]
@@ -142,11 +142,11 @@ public class AuthServiceImpl implements AuthService {
         String permissionKey = YdlConstants.PERMISSION_PREFIX + authorization;
 
         // 角色列表
-        List<String> roles = permission.getYdlRoles().stream().map(YdlRole::getRoleName).collect(Collectors.toList());
+        List<String> roles = rolesAndPermissions.getYdlRoles().stream().map(YdlRole::getRoleName).collect(Collectors.toList());
 
         List<String> permissions = new ArrayList<>();
         // 权限列表
-        permission.getYdlRoles().forEach(role -> role.getYdlMenus().forEach(menu -> permissions.add(menu.getPath())));
+        rolesAndPermissions.getYdlRoles().forEach(role -> role.getYdlMenus().forEach(menu -> permissions.add(menu.getPath())));
 
         redisTemplate.setObject(roleKey, roles, YdlConstants.TOKEN_EXPIRE);
         redisTemplate.setObject(permissionKey, permissions, YdlConstants.TOKEN_EXPIRE);
@@ -154,12 +154,8 @@ public class AuthServiceImpl implements AuthService {
 
         HashMap<String, Object> data = new HashMap<>();
 
-
-        HashMap<String, List<String>> rolesAndPermissions = new HashMap<>();
-        rolesAndPermissions.put("roles", roles);
-        rolesAndPermissions.put("permissions", permissions);
-
-        data.put("permission", permission);
+        data.put("roles", roles);
+        data.put("permissions", permissions);
         data.put("rolesAndPermissions", rolesAndPermissions);
 
         return R.success("获取成功", data);
