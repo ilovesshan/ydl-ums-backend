@@ -1,12 +1,13 @@
 package com.ilovesshan.service.impl;
 
-import com.ilovesshan.pojo.YdlUser;
+import com.ilovesshan.anotation.HasPermission;
 import com.ilovesshan.mapper.YdlUserMapper;
+import com.ilovesshan.pojo.YdlUser;
 import com.ilovesshan.service.YdlUserService;
-import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
@@ -34,6 +35,7 @@ public class YdlUserServiceImpl implements YdlUserService {
      * @return 实例对象
      */
     @Override
+    @HasPermission({"/system-management/user-management"})
     public YdlUser queryById(Long userId) {
         return this.ydlUserMapper.queryById(userId);
     }
@@ -41,8 +43,8 @@ public class YdlUserServiceImpl implements YdlUserService {
     /**
      * 分页查询
      *
-     * @param ydlUser 筛选条件
-     * @param pageRequest      分页对象
+     * @param ydlUser     筛选条件
+     * @param pageRequest 分页对象
      * @return 查询结果
      */
     @Override

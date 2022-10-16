@@ -13,8 +13,8 @@ import java.lang.annotation.Target;
  * @description:
  */
 
-@Target(ElementType.TYPE)
+@Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface HasRole {
-
+    String[] value();
 }
