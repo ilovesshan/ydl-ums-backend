@@ -14,11 +14,11 @@
             http://www.springframework.org/schema/tx
             http://www.springframework.org/schema/tx/spring-tx.xsd
             http://mybatis.org/schema/mybatis-spring
-            http://mybatis.org/schema/mybatis-spring.xsd
+            https://mybatis.org/schema/mybatis-spring.xsd
 ">
 
     <!--    配置注解扫描-->
-    <context:component-scan base-package=" com.ilovesshan.service, com.ilovesshan.common, com.ilovesshan.handler"/>
+    <context:component-scan base-package="com.ilovesshan.service, com.ilovesshan.common, com.ilovesshan.handler, com.ilovesshan.aspect"/>
 
     <!--    读取数据源-->
     <context:property-placeholder ignore-unresolvable="true" location="classpath:jdbc.properties, classpath:redis.properties"/>

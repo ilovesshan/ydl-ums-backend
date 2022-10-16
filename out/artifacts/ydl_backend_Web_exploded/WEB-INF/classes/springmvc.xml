@@ -72,6 +72,8 @@
         <property name="defaultEncoding" value="UTF-8"/>
     </bean>
 
+    <bean class="com.ilovesshan.aspect.AuthAspect"/>
+
 
     <!--    配置静态资源信息-->
     <!--    <mvc:resources mapping="/js/**" location="/static/js/"/>-->
