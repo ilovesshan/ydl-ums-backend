@@ -1,6 +1,7 @@
 package com.ilovesshan.service.impl;
 
 import com.ilovesshan.anotation.HasPermission;
+import com.ilovesshan.anotation.Log;
 import com.ilovesshan.mapper.YdlUserMapper;
 import com.ilovesshan.pojo.YdlUser;
 import com.ilovesshan.service.YdlUserService;
@@ -35,6 +36,7 @@ public class YdlUserServiceImpl implements YdlUserService {
      * @return 实例对象
      */
     @Override
+    @Log(business_module = "用户模块", business_type = "select", business_describe = "根据ID查询用户")
     @HasPermission({"/system-management/user-management"})
     public YdlUser queryById(Long userId) {
         return this.ydlUserMapper.queryById(userId);

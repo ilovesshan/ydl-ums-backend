@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
  * @description:
  */
 
-@Target({ElementType.METHOD, ElementType.TYPE})
+@Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface HasPermission {
     String[] value();
