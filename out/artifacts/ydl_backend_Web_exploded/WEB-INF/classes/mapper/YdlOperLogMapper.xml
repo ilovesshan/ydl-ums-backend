@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ilovesshan.mapper.YdlOperLogMapper">
+
+    <resultMap type="com.ilovesshan.pojo.YdlOperLog" id="YdlOperLogMap">
+        <result property="operId" column="oper_id" jdbcType="INTEGER"/>
+        <result property="businessType" column="business_type" jdbcType="VARCHAR"/>
+        <result property="method" column="method" jdbcType="VARCHAR"/>
+        <result property="requestMethod" column="request_method" jdbcType="VARCHAR"/>
+        <result property="operName" column="oper_name" jdbcType="VARCHAR"/>
+        <result property="operUrl" column="oper_url" jdbcType="VARCHAR"/>
+        <result property="operIp" column="oper_ip" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="errormsg" column="errorMsg" jdbcType="VARCHAR"/>
+        <result property="opertime" column="operTime" jdbcType="TIMESTAMP"/>
+        <result property="businessModule" column="business_module" jdbcType="VARCHAR"/>
+        <result property="businessDescribe" column="business_describe" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="YdlOperLogMap">
+        select
+          oper_id, business_type, method, request_method, oper_name, oper_url, oper_ip, status, errorMsg, operTime, business_module, business_describe
+        from ydl_oper_log
+        where oper_id = #{operId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="YdlOperLogMap">
+        select
+          oper_id, business_type, method, request_method, oper_name, oper_url, oper_ip, status, errorMsg, operTime, business_module, business_describe
+        from ydl_oper_log
+        <where>
+            <if test="ydlOperLog.operId != null">
+                and oper_id = #{ydlOperLog.operId}
+            </if>
+            <if test="ydlOperLog.businessType != null and ydlOperLog.businessType != ''">
+                and business_type = #{ydlOperLog.businessType}
+            </if>
+            <if test="ydlOperLog.method != null and ydlOperLog.method != ''">
+                and method = #{ydlOperLog.method}
+            </if>
+            <if test="ydlOperLog.requestMethod != null and ydlOperLog.requestMethod != ''">
+                and request_method = #{ydlOperLog.requestMethod}
+            </if>
+            <if test="ydlOperLog.operName != null and ydlOperLog.operName != ''">
+                and oper_name = #{ydlOperLog.operName}
+            </if>
+            <if test="ydlOperLog.operUrl != null and ydlOperLog.operUrl != ''">
+                and oper_url = #{ydlOperLog.operUrl}
+            </if>
+            <if test="ydlOperLog.operIp != null and ydlOperLog.operIp != ''">
+                and oper_ip = #{ydlOperLog.operIp}
+            </if>
+            <if test="ydlOperLog.status != null">
+                and status = #{ydlOperLog.status}
+            </if>
+            <if test="ydlOperLog.errormsg != null and ydlOperLog.errormsg != ''">
+                and errorMsg = #{ydlOperLog.errormsg}
+            </if>
+            <if test="ydlOperLog.opertime != null">
+                and operTime = #{ydlOperLog.opertime}
+            </if>
+            <if test="ydlOperLog.businessModule != null and ydlOperLog.businessModule != ''">
+                and business_module = #{ydlOperLog.businessModule}
+            </if>
+            <if test="ydlOperLog.businessDescribe != null and ydlOperLog.businessDescribe != ''">
+                and business_describe = #{ydlOperLog.businessDescribe}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from ydl_oper_log
+        <where>
+            <if test="operId != null">
+                and oper_id = #{operId}
+            </if>
+            <if test="businessType != null and businessType != ''">
+                and business_type = #{businessType}
+            </if>
+            <if test="method != null and method != ''">
+                and method = #{method}
+            </if>
+            <if test="requestMethod != null and requestMethod != ''">
+                and request_method = #{requestMethod}
+            </if>
+            <if test="operName != null and operName != ''">
+                and oper_name = #{operName}
+            </if>
+            <if test="operUrl != null and operUrl != ''">
+                and oper_url = #{operUrl}
+            </if>
+            <if test="operIp != null and operIp != ''">
+                and oper_ip = #{operIp}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="errormsg != null and errormsg != ''">
+                and errorMsg = #{errormsg}
+            </if>
+            <if test="opertime != null">
+                and operTime = #{opertime}
+            </if>
+            <if test="businessModule != null and businessModule != ''">
+                and business_module = #{businessModule}
+            </if>
+            <if test="businessDescribe != null and businessDescribe != ''">
+                and business_describe = #{businessDescribe}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="operId" useGeneratedKeys="true">
+        insert into ydl_oper_log(business_type, method, request_method, oper_name, oper_url, oper_ip, status, errorMsg, operTime, business_module, business_describe)
+        values (#{businessType}, #{method}, #{requestMethod}, #{operName}, #{operUrl}, #{operIp}, #{status}, #{errormsg}, #{opertime}, #{businessModule}, #{businessDescribe})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="operId" useGeneratedKeys="true">
+        insert into ydl_oper_log(business_type, method, request_method, oper_name, oper_url, oper_ip, status, errorMsg, operTime, business_module, business_describe)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.businessType}, #{entity.method}, #{entity.requestMethod}, #{entity.operName}, #{entity.operUrl}, #{entity.operIp}, #{entity.status}, #{entity.errormsg}, #{entity.opertime}, #{entity.businessModule}, #{entity.businessDescribe})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="operId" useGeneratedKeys="true">
+        insert into ydl_oper_log(business_type, method, request_method, oper_name, oper_url, oper_ip, status, errorMsg, operTime, business_module, business_describe)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.businessType}, #{entity.method}, #{entity.requestMethod}, #{entity.operName}, #{entity.operUrl}, #{entity.operIp}, #{entity.status}, #{entity.errormsg}, #{entity.opertime}, #{entity.businessModule}, #{entity.businessDescribe})
+        </foreach>
+        on duplicate key update
+        business_type = values(business_type),
+        method = values(method),
+        request_method = values(request_method),
+        oper_name = values(oper_name),
+        oper_url = values(oper_url),
+        oper_ip = values(oper_ip),
+        status = values(status),
+        errorMsg = values(errorMsg),
+        operTime = values(operTime),
+        business_module = values(business_module),
+        business_describe = values(business_describe)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update ydl_oper_log
+        <set>
+            <if test="businessType != null and businessType != ''">
+                business_type = #{businessType},
+            </if>
+            <if test="method != null and method != ''">
+                method = #{method},
+            </if>
+            <if test="requestMethod != null and requestMethod != ''">
+                request_method = #{requestMethod},
+            </if>
+            <if test="operName != null and operName != ''">
+                oper_name = #{operName},
+            </if>
+            <if test="operUrl != null and operUrl != ''">
+                oper_url = #{operUrl},
+            </if>
+            <if test="operIp != null and operIp != ''">
+                oper_ip = #{operIp},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="errormsg != null and errormsg != ''">
+                errorMsg = #{errormsg},
+            </if>
+            <if test="opertime != null">
+                operTime = #{opertime},
+            </if>
+            <if test="businessModule != null and businessModule != ''">
+                business_module = #{businessModule},
+            </if>
+            <if test="businessDescribe != null and businessDescribe != ''">
+                business_describe = #{businessDescribe},
+            </if>
+        </set>
+        where oper_id = #{operId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from ydl_oper_log where oper_id = #{operId}
+    </delete>
+
+</mapper>
+
