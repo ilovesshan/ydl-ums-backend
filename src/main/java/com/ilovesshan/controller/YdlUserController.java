@@ -56,8 +56,9 @@ public class YdlUserController {
      * @return 新增结果
      */
     @PostMapping
-    public ResponseEntity<YdlUser> add(YdlUser ydlUser) {
-        return ResponseEntity.ok(this.ydlUserService.insert(ydlUser));
+    public R add(@RequestBody YdlUser ydlUser) {
+        YdlUser user = this.ydlUserService.insert(ydlUser);
+        return R.success(R.SUCCESS_MESSAGE_update, user);
     }
 
     /**
@@ -67,8 +68,9 @@ public class YdlUserController {
      * @return 编辑结果
      */
     @PutMapping
-    public ResponseEntity<YdlUser> edit(YdlUser ydlUser) {
-        return ResponseEntity.ok(this.ydlUserService.update(ydlUser));
+    public R edit(@RequestBody YdlUser ydlUser) {
+        YdlUser user = this.ydlUserService.update(ydlUser);
+        return R.success(R.SUCCESS_MESSAGE_update, user);
     }
 
     /**

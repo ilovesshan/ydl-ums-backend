@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 /**
  * 用户信息表(YdlUser)表服务实现类
@@ -75,6 +76,7 @@ public class YdlUserServiceImpl implements YdlUserService {
      */
     @Override
     public YdlUser update(YdlUser ydlUser) {
+        ydlUser.setUpdateTime(new Date());
         this.ydlUserMapper.update(ydlUser);
         return this.queryById(ydlUser.getUserId());
     }
