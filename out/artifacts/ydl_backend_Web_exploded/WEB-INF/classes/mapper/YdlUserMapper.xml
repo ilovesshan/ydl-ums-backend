@@ -67,8 +67,8 @@
             <if test="ydlUser.userId != null">
                 and user_id = #{ydlUser.userId}
             </if>
-            <if test="ydlUser.userName != null and ydlUser.userName != ''">
-                and username = #{ydlUser.userName}
+            <if test="ydlUser.username != null and ydlUser.username != ''">
+                and username = #{ydlUser.username}
             </if>
             <if test="ydlUser.nickName != null and ydlUser.nickName != ''">
                 and nick_name = #{ydlUser.nickName}
@@ -124,8 +124,8 @@
             <if test="userId != null">
                 and user_id = #{userId}
             </if>
-            <if test="userName != null and userName != ''">
-                and username = #{userName}
+            <if test="username != null and username != ''">
+                and username = #{username}
             </if>
             <if test="nickName != null and nickName != ''">
                 and nick_name = #{nickName}
@@ -175,14 +175,14 @@
     <!--新增所有列-->
     <insert id="insert" keyProperty="userId" useGeneratedKeys="true">
         insert into ydl_user(username, nick_name, email, phonenumber, sex, avatar, password, status, del_flag, login_ip, login_date, create_by, create_time, update_by, update_time)
-        values (#{userName}, #{nickName}, #{email}, #{phonenumber}, #{sex}, #{avatar}, #{password}, #{status}, #{delFlag}, #{loginIp}, #{loginDate}, #{createBy}, #{createTime}, #{updateBy}, #{updateTime})
+        values (#{username}, #{nickName}, #{email}, #{phonenumber}, #{sex}, #{avatar}, #{password}, #{status}, #{delFlag}, #{loginIp}, #{loginDate}, #{createBy}, #{createTime}, #{updateBy}, #{updateTime})
     </insert>
 
     <insert id="insertBatch" keyProperty="userId" useGeneratedKeys="true">
         insert into ydl_user(username, nick_name, email, phonenumber, sex, avatar, password, status, del_flag, login_ip, login_date, create_by, create_time, update_by, update_time)
         values
         <foreach collection="entities" item="entity" separator=",">
-        (#{entity.userName}, #{entity.nickName}, #{entity.email}, #{entity.phonenumber}, #{entity.sex}, #{entity.avatar}, #{entity.password}, #{entity.status}, #{entity.delFlag}, #{entity.loginIp}, #{entity.loginDate}, #{entity.createBy}, #{entity.createTime}, #{entity.updateBy}, #{entity.updateTime})
+        (#{entity.username}, #{entity.nickName}, #{entity.email}, #{entity.phonenumber}, #{entity.sex}, #{entity.avatar}, #{entity.password}, #{entity.status}, #{entity.delFlag}, #{entity.loginIp}, #{entity.loginDate}, #{entity.createBy}, #{entity.createTime}, #{entity.updateBy}, #{entity.updateTime})
         </foreach>
     </insert>
 
@@ -190,7 +190,7 @@
         insert into ydl_user(username, nick_name, email, phonenumber, sex, avatar, password, status, del_flag, login_ip, login_date, create_by, create_time, update_by, update_time)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (#{entity.userName}, #{entity.nickName}, #{entity.email}, #{entity.phonenumber}, #{entity.sex}, #{entity.avatar}, #{entity.password}, #{entity.status}, #{entity.delFlag}, #{entity.loginIp}, #{entity.loginDate}, #{entity.createBy}, #{entity.createTime}, #{entity.updateBy}, #{entity.updateTime})
+            (#{entity.username}, #{entity.nickName}, #{entity.email}, #{entity.phonenumber}, #{entity.sex}, #{entity.avatar}, #{entity.password}, #{entity.status}, #{entity.delFlag}, #{entity.loginIp}, #{entity.loginDate}, #{entity.createBy}, #{entity.createTime}, #{entity.updateBy}, #{entity.updateTime})
         </foreach>
         on duplicate key update
         username = values(username),
@@ -214,8 +214,8 @@
     <update id="update">
         update ydl_user
         <set>
-            <if test="userName != null and userName != ''">
-                username = #{userName},
+            <if test="username != null and username != ''">
+                username = #{username},
             </if>
             <if test="nickName != null and nickName != ''">
                 nick_name = #{nickName},

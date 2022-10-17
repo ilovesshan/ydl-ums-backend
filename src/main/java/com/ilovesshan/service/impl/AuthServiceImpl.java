@@ -7,10 +7,7 @@ import com.ilovesshan.common.R;
 import com.ilovesshan.common.RedisTemplate;
 import com.ilovesshan.constant.YdlConstants;
 import com.ilovesshan.mapper.AuthMapper;
-import com.ilovesshan.pojo.YdlAuth;
-import com.ilovesshan.pojo.YdlRole;
-import com.ilovesshan.pojo.YdlUser;
-import com.ilovesshan.pojo.YdlUserLogin;
+import com.ilovesshan.pojo.*;
 import com.ilovesshan.service.AuthService;
 import com.ilovesshan.service.YdlUserService;
 import eu.bitwalker.useragentutils.UserAgent;
@@ -159,5 +156,23 @@ public class AuthServiceImpl implements AuthService {
         data.put("rolesAndPermissions", rolesAndPermissions);
 
         return R.success("获取成功", data);
+    }
+
+    @Override
+    public R updatePassword(YdlUpdatePassword updatePassword) {
+        YdlUser ydlUser = userService.queryById(updatePassword.getUserId());
+
+        if (ydlUser == null || (!ydlUser.getPassword().equals(updatePassword.getOldPassword()))) {
+            return R.fail("旧密码错误，请重新输入", null);
+        }
+
+        if (!updatePassword.getNewPassword().equals(updatePassword.getSureNewPassword())) {
+            return R.fail("两次密码输入不一致，请重新输入", null);
+        }
+        YdlUser user = new YdlUser();
+        user.setUserId(updatePassword.getUserId());
+        user.setPassword(updatePassword.getNewPassword());
+        userService.update(user);
+        return R.success("密码更新成功，请重新登录", null);
     }
 }

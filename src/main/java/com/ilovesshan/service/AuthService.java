@@ -2,6 +2,7 @@ package com.ilovesshan.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ilovesshan.common.R;
+import com.ilovesshan.pojo.YdlUpdatePassword;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,4 +20,6 @@ public interface AuthService {
     R logout();
 
     R permission(Long userId);
+
+    R updatePassword(YdlUpdatePassword updatePassword);
 }

@@ -2,6 +2,7 @@ package com.ilovesshan.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ilovesshan.common.R;
+import com.ilovesshan.pojo.YdlUpdatePassword;
 import com.ilovesshan.pojo.YdlUser;
 import com.ilovesshan.service.AuthService;
 import lombok.extern.slf4j.Slf4j;
@@ -62,10 +63,16 @@ public class AuthController {
     }
 
 
+    @PutMapping("/password")
+    @ResponseBody
+    public R password(@RequestBody YdlUpdatePassword updatePassword) {
+        return authService.updatePassword(updatePassword);
+    }
+
+
     @PostMapping("/permission/{userId}")
     @ResponseBody
     public R permission(@PathVariable("userId") Long userId) {
-        log.debug("111111111");
         return authService.permission(userId);
     }
 }
