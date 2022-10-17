@@ -28,12 +28,12 @@ public class YdlOperLogController {
      * 分页查询
      *
      * @param ydlOperLog 筛选条件
-     * @param pageNum  分页页数
-     * @param pageSize 分页条数
+     * @param pageNum    分页页数
+     * @param pageSize   分页条数
      * @return 查询结果
      */
     @GetMapping
-    public ResponseEntity<Page<YdlOperLog>> queryByPage(YdlOperLog ydlOperLog,  @RequestParam("pageSize") Integer pageSize, @RequestParam("pageNum") Integer pageNum) {
+    public ResponseEntity<Page<YdlOperLog>> queryByPage(YdlOperLog ydlOperLog, @RequestParam("pageSize") Integer pageSize, @RequestParam("pageNum") Integer pageNum) {
         return ResponseEntity.ok(this.ydlOperLogService.queryByPage(ydlOperLog, PageRequest.of(pageNum - 1, pageSize)));
     }
 
@@ -55,8 +55,8 @@ public class YdlOperLogController {
      * @return 新增结果
      */
     @PostMapping
-    public ResponseEntity<YdlOperLog> add(YdlOperLog ydlOperLog) {
-        return ResponseEntity.ok(this.ydlOperLogService.insert(ydlOperLog));
+    public void add(YdlOperLog ydlOperLog) {
+        this.ydlOperLogService.insert(ydlOperLog);
     }
 
     /**

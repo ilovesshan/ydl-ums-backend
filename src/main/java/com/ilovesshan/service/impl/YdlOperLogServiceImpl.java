@@ -3,6 +3,8 @@ package com.ilovesshan.service.impl;
 import com.ilovesshan.pojo.YdlOperLog;
 import com.ilovesshan.mapper.YdlOperLogMapper;
 import com.ilovesshan.service.YdlOperLogService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -17,6 +19,7 @@ import javax.annotation.Resource;
  * @since 2022-10-16 16:21:32
  */
 @Service("ydlOperLogService")
+@Slf4j
 public class YdlOperLogServiceImpl implements YdlOperLogService {
     @Resource
     private YdlOperLogMapper ydlOperLogMapper;
@@ -35,8 +38,8 @@ public class YdlOperLogServiceImpl implements YdlOperLogService {
     /**
      * 分页查询
      *
-     * @param ydlOperLog 筛选条件
-     * @param pageRequest      分页对象
+     * @param ydlOperLog  筛选条件
+     * @param pageRequest 分页对象
      * @return 查询结果
      */
     @Override
@@ -52,9 +55,9 @@ public class YdlOperLogServiceImpl implements YdlOperLogService {
      * @return 实例对象
      */
     @Override
-    public YdlOperLog insert(YdlOperLog ydlOperLog) {
-        this.ydlOperLogMapper.insert(ydlOperLog);
-        return ydlOperLog;
+    @Async(value = "executor")
+    public void insert(YdlOperLog ydlOperLog) {
+        ydlOperLogMapper.insert(ydlOperLog);
     }
 
     /**

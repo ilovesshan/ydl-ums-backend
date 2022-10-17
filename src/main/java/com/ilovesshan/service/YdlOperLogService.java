@@ -35,7 +35,7 @@ public interface YdlOperLogService {
      * @param ydlOperLog 实例对象
      * @return 实例对象
      */
-    YdlOperLog insert(YdlOperLog ydlOperLog);
+    void insert(YdlOperLog ydlOperLog);
 
     /**
      * 修改数据

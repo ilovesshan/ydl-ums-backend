@@ -8,10 +8,6 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -32,7 +28,7 @@ import java.util.Objects;
 @Component
 @Aspect
 @Slf4j
-public class LogAspect implements BeanFactoryAware {
+public class LogAspect /* implements BeanFactoryAware */ {
 
     @Resource
     private YdlOperLogService ydlOperLogService;
@@ -40,51 +36,54 @@ public class LogAspect implements BeanFactoryAware {
     // @Resource
     // private ThreadPoolExecutor threadPoolExecutor;
 
-    private BeanFactory beanFactory;
+    // private BeanFactory beanFactory;
 
-    @Override
-    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-        this.beanFactory = beanFactory;
-    }
+    // @Override
+    // public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+    //     this.beanFactory = beanFactory;
+    // }
 
 
     // 最终通知
-    @AfterReturning(value = "@annotation(log)")
-    public void afterReturningAdvice(JoinPoint joinPoint, Log log) {
+    @AfterReturning(value = "@annotation(loggger)")
+    public void afterReturningAdvice(JoinPoint joinPoint, Log loggger) {
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
-        YdlOperLog  ydlOperLog=  createLoggerEntity(request, joinPoint, log, null);
+        YdlOperLog ydlOperLog = createLoggerEntity(request, joinPoint, loggger, null);
+        ydlOperLogService.insert(ydlOperLog);
 
         // logHandler被Async注解修饰标识是一个异步方法，会生成一个代理
         // 需要通过这个代理对象去调用logHandler
-        LogAspect logAspect = beanFactory.getBean(this.getClass());
-        logAspect.logHandler(ydlOperLog);
+        // LogAspect logAspect = beanFactory.getBean(this.getClass());
+        // logAspect.logHandler(ydlOperLog);
+
+
     }
 
 
     // 异常通知
-    @AfterThrowing(value = "@annotation(log)", throwing = "exception")
-    public void afterReturningAdvice(JoinPoint joinPoint, Log log, Exception exception) {
+    @AfterThrowing(value = "@annotation(logger)", throwing = "exception")
+    public void afterReturningAdvice(JoinPoint joinPoint, Log logger, Exception exception) {
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
-        YdlOperLog  ydlOperLog=  createLoggerEntity(request, joinPoint, log, exception);
+        YdlOperLog ydlOperLog = createLoggerEntity(request, joinPoint, logger, exception);
+        ydlOperLogService.insert(ydlOperLog);
 
-        LogAspect logAspect = beanFactory.getBean(this.getClass());
-        logAspect.logHandler(ydlOperLog);
+        // LogAspect logAspect = beanFactory.getBean(this.getClass());
+        // logAspect.logHandler(ydlOperLog);
     }
 
 
     // 日志核心处理器
-    @Async(value = "executor")
-    public void logHandler(YdlOperLog ydlOperLog) {
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        ydlOperLogService.insert(ydlOperLog);
-
-        // 实现异步 日志提交信息
-        // threadPoolExecutor.execute(() -> {});
-    }
+    // @Async(value = "executor")
+    // public void logHandler(YdlOperLog ydlOperLog) {
+    //     try {
+    //         Thread.sleep(10000);
+    //     } catch (InterruptedException e) {
+    //         e.printStackTrace();
+    //     }
+    //     ydlOperLogService.insert(ydlOperLog);
+    //     // 实现异步 日志提交信息
+    //     // threadPoolExecutor.execute(() -> {});
+    // }
 
 
     // 组装 YdlOperLog对象
