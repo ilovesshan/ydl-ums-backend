@@ -3,6 +3,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:task="http://www.springframework.org/schema/task"
        xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
@@ -13,6 +14,8 @@
             https://www.springframework.org/schema/aop/spring-aop.xsd
             http://www.springframework.org/schema/tx
             http://www.springframework.org/schema/tx/spring-tx.xsd
+            http://www.springframework.org/schema/task
+            http://www.springframework.org/schema/task/spring-task.xsd
             http://mybatis.org/schema/mybatis-spring
             https://mybatis.org/schema/mybatis-spring.xsd
 ">
@@ -65,5 +68,8 @@
         <property name="minIdle" value="${redis.minIdle}"/>
         <property name="maxTotal" value="${redis.maxTotal}"/>
     </bean>
+
+    <task:annotation-driven executor="executor"/>
+    <task:executor id="executor" pool-size="10-20" queue-capacity="32" keep-alive="120" rejection-policy="ABORT"/>
 
 </beans>

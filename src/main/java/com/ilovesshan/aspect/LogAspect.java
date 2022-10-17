@@ -8,6 +8,10 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -16,7 +20,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.Objects;
-import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * Created with IntelliJ IDEA.
@@ -29,20 +32,32 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Component
 @Aspect
 @Slf4j
-public class LogAspect {
+public class LogAspect implements BeanFactoryAware {
 
     @Resource
     private YdlOperLogService ydlOperLogService;
 
-    @Resource
-    private ThreadPoolExecutor threadPoolExecutor;
+    // @Resource
+    // private ThreadPoolExecutor threadPoolExecutor;
+
+    private BeanFactory beanFactory;
+
+    @Override
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+        this.beanFactory = beanFactory;
+    }
 
 
     // 最终通知
     @AfterReturning(value = "@annotation(log)")
     public void afterReturningAdvice(JoinPoint joinPoint, Log log) {
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
-        logHandler(request, joinPoint, log, null);
+        YdlOperLog  ydlOperLog=  createLoggerEntity(request, joinPoint, log, null);
+
+        // logHandler被Async注解修饰标识是一个异步方法，会生成一个代理
+        // 需要通过这个代理对象去调用logHandler
+        LogAspect logAspect = beanFactory.getBean(this.getClass());
+        logAspect.logHandler(ydlOperLog);
     }
 
 
@@ -50,12 +65,30 @@ public class LogAspect {
     @AfterThrowing(value = "@annotation(log)", throwing = "exception")
     public void afterReturningAdvice(JoinPoint joinPoint, Log log, Exception exception) {
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
-        logHandler(request, joinPoint, log, exception);
+        YdlOperLog  ydlOperLog=  createLoggerEntity(request, joinPoint, log, exception);
+
+        LogAspect logAspect = beanFactory.getBean(this.getClass());
+        logAspect.logHandler(ydlOperLog);
     }
 
 
     // 日志核心处理器
-    private void logHandler(HttpServletRequest request, JoinPoint joinPoint, Log log, Exception exception) {
+    @Async(value = "executor")
+    public void logHandler(YdlOperLog ydlOperLog) {
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        ydlOperLogService.insert(ydlOperLog);
+
+        // 实现异步 日志提交信息
+        // threadPoolExecutor.execute(() -> {});
+    }
+
+
+    // 组装 YdlOperLog对象
+    private YdlOperLog createLoggerEntity(HttpServletRequest request, JoinPoint joinPoint, Log log, Exception exception) {
         YdlOperLog ydlOperLog = new YdlOperLog();
         ydlOperLog.setOperIp(request.getRemoteAddr());
         ydlOperLog.setOperName(request.getHeader("username"));
@@ -72,10 +105,6 @@ public class LogAspect {
         ydlOperLog.setBusinessType(log.business_type());
         ydlOperLog.setBusinessDescribe(log.business_describe());
         ydlOperLog.setOpertime(new Date());
-
-        // 实现异步 日志提交信息
-        threadPoolExecutor.execute(() -> {
-            ydlOperLogService.insert(ydlOperLog);
-        });
+        return ydlOperLog;
     }
 }
