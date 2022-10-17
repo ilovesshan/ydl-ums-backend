@@ -16,6 +16,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.Objects;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * Created with IntelliJ IDEA.
@@ -32,6 +33,9 @@ public class LogAspect {
 
     @Resource
     private YdlOperLogService ydlOperLogService;
+
+    @Resource
+    private ThreadPoolExecutor threadPoolExecutor;
 
 
     // 最终通知
@@ -53,7 +57,6 @@ public class LogAspect {
     // 日志核心处理器
     private void logHandler(HttpServletRequest request, JoinPoint joinPoint, Log log, Exception exception) {
         YdlOperLog ydlOperLog = new YdlOperLog();
-
         ydlOperLog.setOperIp(request.getRemoteAddr());
         ydlOperLog.setOperName(request.getHeader("username"));
         ydlOperLog.setOperUrl(request.getRequestURI());
@@ -70,7 +73,9 @@ public class LogAspect {
         ydlOperLog.setBusinessDescribe(log.business_describe());
         ydlOperLog.setOpertime(new Date());
 
-        // 提交信息
-        ydlOperLogService.insert(ydlOperLog);
+        // 实现异步 日志提交信息
+        threadPoolExecutor.execute(() -> {
+            ydlOperLogService.insert(ydlOperLog);
+        });
     }
 }
