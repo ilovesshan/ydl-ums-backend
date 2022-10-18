@@ -21,8 +21,29 @@
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
+    <sql id="selectColumns">
+        user_id
+        ,
+       username,
+       nick_name,
+       email,
+       phonenumber,
+       sex,
+       a.url as avatar,
+       password,
+       status,
+       del_flag,
+       login_ip,
+       login_date,
+       u.create_by,
+       u.create_time,
+       u.update_by,
+       u.update_time
+    </sql>
+
     <sql id="allColumns">
-        user_id,
+        user_id
+        ,
         user_id,
         username,
         nick_name,
@@ -43,25 +64,28 @@
 
     <select id="selectUserByName" resultType="ydlUser">
         select
-        <include refid="allColumns"/>
-        from
-        ydl_user
-        where
-        `username` like #{username}
+        <include refid="selectColumns"/>
+        from ydl_user u
+        left join
+        ydl_attachment a on u.avatar = a.id
+        where `username` like #{username}
     </select>
 
     <!--查询单个-->
     <select id="queryById" resultMap="YdlUserMap">
         select
-          user_id, username, nick_name, email, phonenumber, sex, avatar, password, status, del_flag, login_ip, login_date, create_by, create_time, update_by, update_time
-        from ydl_user
+        <include refid="selectColumns"/>
+        from ydl_user u
+        left join
+        ydl_attachment a on u.avatar = a.id
         where user_id = #{userId}
     </select>
 
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="YdlUserMap">
         select
-          user_id, username, nick_name, email, phonenumber, sex, avatar, password, status, del_flag, login_ip, login_date, create_by, create_time, update_by, update_time
+        user_id, username, nick_name, email, phonenumber, sex, avatar, password, status, del_flag, login_ip, login_date,
+        create_by, create_time, update_by, update_time
         from ydl_user
         <where>
             <if test="ydlUser.userId != null">
@@ -174,23 +198,31 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="userId" useGeneratedKeys="true">
-        insert into ydl_user(username, nick_name, email, phonenumber, sex, avatar, password, status, del_flag, login_ip, login_date, create_by, create_time, update_by, update_time)
-        values (#{username}, #{nickName}, #{email}, #{phonenumber}, #{sex}, #{avatar}, #{password}, #{status}, #{delFlag}, #{loginIp}, #{loginDate}, #{createBy}, #{createTime}, #{updateBy}, #{updateTime})
+        insert into ydl_user(username, nick_name, email, phonenumber, sex, avatar, password, status, del_flag, login_ip,
+                             login_date, create_by, create_time, update_by, update_time)
+        values (#{username}, #{nickName}, #{email}, #{phonenumber}, #{sex}, #{avatar}, #{password}, #{status},
+                #{delFlag}, #{loginIp}, #{loginDate}, #{createBy}, #{createTime}, #{updateBy}, #{updateTime})
     </insert>
 
     <insert id="insertBatch" keyProperty="userId" useGeneratedKeys="true">
-        insert into ydl_user(username, nick_name, email, phonenumber, sex, avatar, password, status, del_flag, login_ip, login_date, create_by, create_time, update_by, update_time)
+        insert into ydl_user(username, nick_name, email, phonenumber, sex, avatar, password, status, del_flag, login_ip,
+        login_date, create_by, create_time, update_by, update_time)
         values
         <foreach collection="entities" item="entity" separator=",">
-        (#{entity.username}, #{entity.nickName}, #{entity.email}, #{entity.phonenumber}, #{entity.sex}, #{entity.avatar}, #{entity.password}, #{entity.status}, #{entity.delFlag}, #{entity.loginIp}, #{entity.loginDate}, #{entity.createBy}, #{entity.createTime}, #{entity.updateBy}, #{entity.updateTime})
+            (#{entity.username}, #{entity.nickName}, #{entity.email}, #{entity.phonenumber}, #{entity.sex},
+            #{entity.avatar}, #{entity.password}, #{entity.status}, #{entity.delFlag}, #{entity.loginIp},
+            #{entity.loginDate}, #{entity.createBy}, #{entity.createTime}, #{entity.updateBy}, #{entity.updateTime})
         </foreach>
     </insert>
 
     <insert id="insertOrUpdateBatch" keyProperty="userId" useGeneratedKeys="true">
-        insert into ydl_user(username, nick_name, email, phonenumber, sex, avatar, password, status, del_flag, login_ip, login_date, create_by, create_time, update_by, update_time)
+        insert into ydl_user(username, nick_name, email, phonenumber, sex, avatar, password, status, del_flag, login_ip,
+        login_date, create_by, create_time, update_by, update_time)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (#{entity.username}, #{entity.nickName}, #{entity.email}, #{entity.phonenumber}, #{entity.sex}, #{entity.avatar}, #{entity.password}, #{entity.status}, #{entity.delFlag}, #{entity.loginIp}, #{entity.loginDate}, #{entity.createBy}, #{entity.createTime}, #{entity.updateBy}, #{entity.updateTime})
+            (#{entity.username}, #{entity.nickName}, #{entity.email}, #{entity.phonenumber}, #{entity.sex},
+            #{entity.avatar}, #{entity.password}, #{entity.status}, #{entity.delFlag}, #{entity.loginIp},
+            #{entity.loginDate}, #{entity.createBy}, #{entity.createTime}, #{entity.updateBy}, #{entity.updateTime})
         </foreach>
         on duplicate key update
         username = values(username),
@@ -265,7 +297,9 @@
 
     <!--通过主键删除-->
     <delete id="deleteById">
-        delete from ydl_user where user_id = #{userId}
+        delete
+        from ydl_user
+        where user_id = #{userId}
     </delete>
 
 </mapper>

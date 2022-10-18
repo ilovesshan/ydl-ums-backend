@@ -37,8 +37,17 @@ public class AuthHandlerInterceptor implements HandlerInterceptor {
         R responseExNoAuth = R.fail("该账号可能处于异地登录状态，请重新登录再试", null);
         response.setContentType("application/json;charset=utf-8");
         // 添加白名单
-        List<String> list = Arrays.asList("/ums/login", "/ums/logout", "/ums/register");
-        if (!list.contains(request.getRequestURI())) {
+        List<String> whiteNames = Arrays.asList("/ums/login", "/ums/logout", "/ums/attachment/upload", "/ums/attachment/download", "/ums/register");
+
+        boolean canThrough = false;
+        for (String name : whiteNames) {
+            if (request.getRequestURI().contains(name)) {
+                canThrough = true;
+                break;
+            }
+        }
+
+        if (!canThrough) {
             String authorization = request.getHeader("Authorization");
             String username = request.getHeader("username");
             // token 不存在
