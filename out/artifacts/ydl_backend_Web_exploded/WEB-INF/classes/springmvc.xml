@@ -76,22 +76,22 @@
 
 
     <!--    配置静态资源信息-->
-    <!--    <mvc:resources mapping="/js/**" location="/static/js/"/>-->
-    <!--    <mvc:resources mapping="/css/**" location="/static/css/"/>-->
-    <!--    <mvc:resources mapping="/images/**" location="/static/images/"/>-->
+    <mvc:resources mapping="/js/**" location="/static/js/"/>
+    <mvc:resources mapping="/css/**" location="/static/css/"/>
+    <mvc:resources mapping="/images/**" location="/static/images/"/>
+    <mvc:resources mapping="/ssm-upload/**" location="file:///D:/ssm-upload/"/>
 
 
     <!--        配置拦截器-->
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
-            <!--            <mvc:exclude-mapping path="ums/login"/>-->
-            <!--            <mvc:exclude-mapping path="/**/*.css"/>-->
-            <!--            <mvc:exclude-mapping path="/**/*.js"/>-->
-            <!--            <mvc:exclude-mapping path="/**/*.png"/>-->
-            <!--            <mvc:exclude-mapping path="/**/*.gif"/>-->
-            <!--            <mvc:exclude-mapping path="/**/*.jpg"/>-->
-            <!--            <mvc:exclude-mapping path="/**/*.jpeg"/>-->
+            <mvc:exclude-mapping path="/**/*.css"/>
+            <mvc:exclude-mapping path="/**/*.js"/>
+            <mvc:exclude-mapping path="/**/*.png"/>
+            <mvc:exclude-mapping path="/**/*.gif"/>
+            <mvc:exclude-mapping path="/**/*.jpg"/>
+            <mvc:exclude-mapping path="/**/*.jpeg"/>
             <bean class="com.ilovesshan.interceptor.AuthHandlerInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
