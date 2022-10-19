@@ -37,7 +37,6 @@ public class YdlUserServiceImpl implements YdlUserService {
      * @return 实例对象
      */
     @Override
-    @Log(business_module = "用户模块", business_type = "select", business_describe = "根据ID查询用户")
     @HasPermission({"/system-management/user-management"})
     public YdlUser queryById(Long userId) {
         return this.ydlUserMapper.queryById(userId);
@@ -63,6 +62,7 @@ public class YdlUserServiceImpl implements YdlUserService {
      * @return 实例对象
      */
     @Override
+    @Log(business_module = "用户模块", business_type = "insert", business_describe = "新增用户")
     public YdlUser insert(YdlUser ydlUser) {
         this.ydlUserMapper.insert(ydlUser);
         return ydlUser;
@@ -75,6 +75,7 @@ public class YdlUserServiceImpl implements YdlUserService {
      * @return 实例对象
      */
     @Override
+    @Log(business_module = "用户模块", business_type = "update", business_describe = "更新用户")
     public YdlUser update(YdlUser ydlUser) {
         ydlUser.setUpdateTime(new Date());
         this.ydlUserMapper.update(ydlUser);
@@ -88,6 +89,7 @@ public class YdlUserServiceImpl implements YdlUserService {
      * @return 是否成功
      */
     @Override
+    @Log(business_module = "用户模块", business_type = "delete", business_describe = "删除用户")
     public boolean deleteById(Long userId) {
         return this.ydlUserMapper.deleteById(userId) > 0;
     }

@@ -2,6 +2,7 @@ package com.ilovesshan.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.ilovesshan.anotation.Log;
 import com.ilovesshan.handler.CustomObjectMapper;
 import com.ilovesshan.common.R;
 import com.ilovesshan.common.RedisTemplate;
@@ -158,6 +159,7 @@ public class AuthServiceImpl implements AuthService {
         return R.success("获取成功", data);
     }
 
+    @Log(business_module = "授权模块", business_type = "update", business_describe = "更新密码")
     @Override
     public R updatePassword(YdlUpdatePassword updatePassword) {
         YdlUser ydlUser = userService.queryById(updatePassword.getUserId());

@@ -1,5 +1,6 @@
 package com.ilovesshan.service.impl;
 
+import com.ilovesshan.anotation.Log;
 import com.ilovesshan.mapper.YdlAttachmentMapper;
 import com.ilovesshan.pojo.YdlAttachment;
 import com.ilovesshan.service.YdlAttachmentService;
@@ -67,6 +68,7 @@ public class YdlAttachmentServiceImpl implements YdlAttachmentService {
      * @return 实例对象
      */
     @Override
+    @Log(business_module = "附件模块", business_type = "insert", business_describe = "新增附件")
     public YdlAttachment insert(MultipartFile multipartFile) {
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
 
@@ -123,6 +125,7 @@ public class YdlAttachmentServiceImpl implements YdlAttachmentService {
      * @return 是否成功
      */
     @Override
+    @Log(business_module = "附件模块", business_type = "delete", business_describe = "删除附件")
     public boolean deleteById(Integer id) {
         YdlAttachment attachment = this.queryById(id);
         if (attachment == null) {
@@ -131,6 +134,7 @@ public class YdlAttachmentServiceImpl implements YdlAttachmentService {
         return this.ydlAttachmentMapper.deleteById(id) > 0;
     }
 
+    @Log(business_module = "附件模块", business_type = "select", business_describe = "下载附件")
     @Override
     public ResponseEntity<byte[]> download(Integer id) {
         YdlAttachment attachment = this.queryById(id);
