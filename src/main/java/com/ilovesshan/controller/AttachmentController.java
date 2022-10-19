@@ -2,6 +2,7 @@ package com.ilovesshan.controller;
 
 import com.ilovesshan.common.R;
 import com.ilovesshan.pojo.YdlAttachment;
+import com.ilovesshan.pojo.YdlUserLoginLog;
 import com.ilovesshan.service.YdlAttachmentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,7 +25,6 @@ import javax.annotation.Resource;
 @Controller
 @RequestMapping("/attachment")
 public class AttachmentController {
-
 
     @Resource
     private YdlAttachmentService attachmentService;
@@ -46,5 +48,12 @@ public class AttachmentController {
     @ResponseBody
     public ResponseEntity<byte[]> download(@PathVariable("id") Integer id) {
         return attachmentService.download(id);
+    }
+
+
+    @PostMapping("/excel")
+    @ResponseBody
+    public ResponseEntity<byte[]> downloadExcel(@RequestBody List<YdlUserLoginLog> accessLogList, HttpServletResponse response) {
+        return attachmentService.downloadExcel(accessLogList);
     }
 }

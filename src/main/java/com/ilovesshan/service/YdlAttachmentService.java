@@ -1,10 +1,13 @@
 package com.ilovesshan.service;
 
 import com.ilovesshan.pojo.YdlAttachment;
+import com.ilovesshan.pojo.YdlUserLoginLog;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * 系统附件表(YdlAttachment)表服务接口
@@ -56,4 +59,6 @@ public interface YdlAttachmentService {
     boolean deleteById(Integer id);
 
     ResponseEntity<byte[]> download(Integer id);
+
+    ResponseEntity<byte[]>  downloadExcel(List<YdlUserLoginLog> ydlUserLoginLogs);
 }

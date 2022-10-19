@@ -84,7 +84,7 @@ public class YdlUserLoginLogServiceImpl implements YdlUserLoginLogService {
 
 
     @Override
-    @Log(business_module = "日志模块", business_type = "delete", business_describe = "根据ids删除日志")
+    @Log(business_module = "日志模块", business_type = "delete", business_describe = "根据ids删除登录日志")
     public boolean deleteByIds(int[] ids) {
         return this.ydlUserLoginLogMapper.deleteByIds(ids) > 0;
     }

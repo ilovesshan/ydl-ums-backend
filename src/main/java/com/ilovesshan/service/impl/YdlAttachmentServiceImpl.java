@@ -1,8 +1,10 @@
 package com.ilovesshan.service.impl;
 
 import com.ilovesshan.anotation.Log;
+import com.ilovesshan.handler.CustomObjectMapper;
 import com.ilovesshan.mapper.YdlAttachmentMapper;
 import com.ilovesshan.pojo.YdlAttachment;
+import com.ilovesshan.pojo.YdlUserLoginLog;
 import com.ilovesshan.service.YdlAttachmentService;
 import org.apache.commons.io.FileUtils;
 import org.springframework.data.domain.Page;
@@ -23,6 +25,7 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -36,6 +39,10 @@ import java.util.UUID;
 public class YdlAttachmentServiceImpl implements YdlAttachmentService {
     @Resource
     private YdlAttachmentMapper ydlAttachmentMapper;
+
+    @Resource
+    private CustomObjectMapper objectMapper;
+
 
     /**
      * 通过ID查询单条数据
@@ -95,13 +102,7 @@ public class YdlAttachmentServiceImpl implements YdlAttachmentService {
             throw new RuntimeException(e);
         }
 
-        YdlAttachment attachment = YdlAttachment.builder()
-                .createBy(request.getHeader("username"))
-                .createByUserId(Integer.valueOf(request.getHeader("userId")))
-                .createTime(new Date())
-                .updateTime(new Date())
-                .url(requestPath)
-                .build();
+        YdlAttachment attachment = YdlAttachment.builder().createBy(request.getHeader("username")).createByUserId(Integer.valueOf(request.getHeader("userId"))).createTime(new Date()).updateTime(new Date()).url(requestPath).build();
         this.ydlAttachmentMapper.insert(attachment);
         return attachment;
     }
@@ -134,6 +135,7 @@ public class YdlAttachmentServiceImpl implements YdlAttachmentService {
         return this.ydlAttachmentMapper.deleteById(id) > 0;
     }
 
+
     @Log(business_module = "附件模块", business_type = "select", business_describe = "下载附件")
     @Override
     public ResponseEntity<byte[]> download(Integer id) {
@@ -156,6 +158,15 @@ public class YdlAttachmentServiceImpl implements YdlAttachmentService {
             e.printStackTrace();
             throw new RuntimeException("该附件信息不存在");
         }
+        return new ResponseEntity<>(bytes, headers, HttpStatus.OK);
+    }
+
+
+    @Override
+    @Log(business_module = "日志模块", business_type = "delete", business_describe = "导出登录日志")
+    public ResponseEntity<byte[]> downloadExcel(List<YdlUserLoginLog> ydlUserLoginLogs) {
+        byte[] bytes = new byte[0];
+        HttpHeaders headers = null;
         return new ResponseEntity<>(bytes, headers, HttpStatus.OK);
     }
 }
