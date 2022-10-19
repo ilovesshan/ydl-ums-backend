@@ -5,7 +5,7 @@ import com.ilovesshan.common.R;
 import com.ilovesshan.common.RedisTemplate;
 import com.ilovesshan.constant.YdlConstants;
 import com.ilovesshan.handler.CustomObjectMapper;
-import com.ilovesshan.pojo.YdlUserLogin;
+import com.ilovesshan.pojo.YdlUserLoginLog;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.annotation.Resource;
@@ -59,8 +59,7 @@ public class AuthHandlerInterceptor implements HandlerInterceptor {
 
             // 根据token去redis中查
             String key = YdlConstants.TOKEN_PREFIX + username + ":" + authorization;
-            YdlUserLogin user = redisTemplate.getObject(key, new TypeReference<YdlUserLogin>() {
-            });
+            YdlUserLoginLog user = redisTemplate.getObject(key, new TypeReference<YdlUserLoginLog>() {});
             if (user == null) {
                 response.setStatus(301);
                 response.getWriter().print(objectMapper.writeValueAsString(responseExNoAuth));

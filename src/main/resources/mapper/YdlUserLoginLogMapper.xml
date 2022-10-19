@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ilovesshan.mapper.YdlUserLoginLogMapper">
+
+    <sql id="commonSelectColumns">
+        <where>
+            <if test="ydlUserLoginLog.loginId != null">
+                and login_id = #{ydlUserLoginLog.loginId}
+            </if>
+            <if test="ydlUserLoginLog.userId != null">
+                and user_id = #{ydlUserLoginLog.userId}
+            </if>
+            <if test="ydlUserLoginLog.token != null and ydlUserLoginLog.token != ''">
+                and token = #{ydlUserLoginLog.token}
+            </if>
+            <if test="ydlUserLoginLog.username != null and ydlUserLoginLog.username != ''">
+                and username = #{ydlUserLoginLog.username}
+            </if>
+            <if test="ydlUserLoginLog.loginIp != null and ydlUserLoginLog.loginIp != ''">
+                and login_ip = #{ydlUserLoginLog.loginIp}
+            </if>
+            <if test="ydlUserLoginLog.loginTime != null">
+                and login_time = #{ydlUserLoginLog.loginTime}
+            </if>
+            <if test="ydlUserLoginLog.loginLocaltion != null and ydlUserLoginLog.loginLocaltion != ''">
+                and login_localtion = #{ydlUserLoginLog.loginLocaltion}
+            </if>
+            <if test="ydlUserLoginLog.browser != null and ydlUserLoginLog.browser != ''">
+                and browser = #{ydlUserLoginLog.browser}
+            </if>
+            <if test="ydlUserLoginLog.systemOs != null and ydlUserLoginLog.systemOs != ''">
+                and system_os = #{ydlUserLoginLog.systemOs}
+            </if>
+            <if test="startTime != null and startTime!= '' and endTime != null and endTime!= ''">
+                and login_time between #{startTime} and #{endTime}
+            </if>
+
+        </where>
+    </sql>
+
+    <resultMap type="com.ilovesshan.pojo.YdlUserLoginLog" id="YdlUserLoginLogMap">
+        <result property="loginId" column="login_id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="token" column="token" jdbcType="VARCHAR"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="loginIp" column="login_ip" jdbcType="VARCHAR"/>
+        <result property="loginTime" column="login_time" jdbcType="TIMESTAMP"/>
+        <result property="loginLocaltion" column="login_localtion" jdbcType="VARCHAR"/>
+        <result property="browser" column="browser" jdbcType="VARCHAR"/>
+        <result property="systemOs" column="system_os" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="YdlUserLoginLogMap">
+        select login_id,
+               user_id,
+               token,
+               username,
+               login_ip,
+               login_time,
+               login_localtion,
+               browser,
+               system_os
+        from ydl_user_login_log
+        where login_id = #{loginId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="YdlUserLoginLogMap">
+        select
+        login_id, user_id, token, username, login_ip, login_time, login_localtion, browser, system_os
+        from ydl_user_login_log
+        <include refid="commonSelectColumns"/>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from ydl_user_login_log
+        <include refid="commonSelectColumns"/>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="loginId" useGeneratedKeys="true">
+        insert into ydl_user_login_log(user_id, token, username, login_ip, login_time, login_localtion, browser,
+                                       system_os)
+        values (#{userId}, #{token}, #{username}, #{loginIp}, #{loginTime}, #{loginLocaltion}, #{browser}, #{systemOs})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="loginId" useGeneratedKeys="true">
+        insert into ydl_user_login_log(user_id, token, username, login_ip, login_time, login_localtion, browser,
+        system_os)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userId}, #{entity.token}, #{entity.username}, #{entity.loginIp}, #{entity.loginTime},
+            #{entity.loginLocaltion}, #{entity.browser}, #{entity.systemOs})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="loginId" useGeneratedKeys="true">
+        insert into ydl_user_login_log(user_id, token, username, login_ip, login_time, login_localtion, browser,
+        system_os)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userId}, #{entity.token}, #{entity.username}, #{entity.loginIp}, #{entity.loginTime},
+            #{entity.loginLocaltion}, #{entity.browser}, #{entity.systemOs})
+        </foreach>
+        on duplicate key update
+        user_id = values(user_id),
+        token = values(token),
+        username = values(username),
+        login_ip = values(login_ip),
+        login_time = values(login_time),
+        login_localtion = values(login_localtion),
+        browser = values(browser),
+        system_os = values(system_os)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update ydl_user_login_log
+        <set>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="token != null and token != ''">
+                token = #{token},
+            </if>
+            <if test="username != null and username != ''">
+                username = #{username},
+            </if>
+            <if test="loginIp != null and loginIp != ''">
+                login_ip = #{loginIp},
+            </if>
+            <if test="loginTime != null">
+                login_time = #{loginTime},
+            </if>
+            <if test="loginLocaltion != null and loginLocaltion != ''">
+                login_localtion = #{loginLocaltion},
+            </if>
+            <if test="browser != null and browser != ''">
+                browser = #{browser},
+            </if>
+            <if test="systemOs != null and systemOs != ''">
+                system_os = #{systemOs},
+            </if>
+        </set>
+        where login_id = #{loginId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from ydl_user_login_log
+        where login_id = #{loginId}
+    </delete>
+
+    <!--通过主键列表 批量删除-->
+    <delete id="deleteByIds">
+        delete from ydl_user_login_log
+        where login_id in
+        <foreach collection="ids" separator="," item="id" open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
+

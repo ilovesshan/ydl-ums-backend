@@ -8,6 +8,7 @@ import com.ilovesshan.common.R;
 import com.ilovesshan.common.RedisTemplate;
 import com.ilovesshan.constant.YdlConstants;
 import com.ilovesshan.mapper.AuthMapper;
+import com.ilovesshan.mapper.YdlUserLoginLogMapper;
 import com.ilovesshan.pojo.*;
 import com.ilovesshan.service.AuthService;
 import com.ilovesshan.service.YdlUserService;
@@ -38,6 +39,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Resource
     private YdlUserService userService;
+
+    @Resource
+    private YdlUserLoginLogMapper userLoginLogMapper;
 
     @Resource
     private AuthMapper authMapper;
@@ -83,9 +87,18 @@ public class AuthServiceImpl implements AuthService {
 
         // 生成token 组装用户登录信息
         String token = UUID.randomUUID().toString().replace("-", "");
-        YdlUserLogin userLogin = YdlUserLogin.builder().token(token).username(username).loginId(ydlUser.getUserId()).loginTime(new Date()).userId(ydlUser.getUserId()).systemOs(userAgent.getOperatingSystem().toString()).browser(userAgent.getBrowser().toString()).loginIp(request.getRemoteAddr()).loginLocaltion(location).build();
+        YdlUserLoginLog userLogin = YdlUserLoginLog.builder()
+                .token(token)
+                .username(username)
+                .loginId(ydlUser.getUserId())
+                .loginTime(new Date())
+                .userId(ydlUser.getUserId())
+                .systemOs(userAgent.getOperatingSystem().toString())
+                .browser(userAgent.getBrowser().toString())
+                .loginIp(request.getRemoteAddr()).loginLocaltion(location)
+                .build();
         // 将用户登录日志存在数据库中
-        authMapper.insert(userLogin);
+        userLoginLogMapper.insert(userLogin);
 
 
         // 查看 redis中是否存在该用户记录的信息
