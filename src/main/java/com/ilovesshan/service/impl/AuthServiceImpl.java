@@ -149,19 +149,17 @@ public class AuthServiceImpl implements AuthService {
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
         String authorization = request.getHeader("Authorization");
 
-        String roleKey = YdlConstants.ROLE_PREFIX + authorization;
-        String permissionKey = YdlConstants.PERMISSION_PREFIX + authorization;
+
+        // String roleKey = YdlConstants.ROLE_PREFIX + authorization;
+        // String permissionKey = YdlConstants.PERMISSION_PREFIX + authorization;
+
 
         // 角色列表
         List<String> roles = rolesAndPermissions.getYdlRoles().stream().map(YdlRole::getRoleName).collect(Collectors.toList());
 
-        List<String> permissions = new ArrayList<>();
         // 权限列表
+        List<String> permissions = new ArrayList<>();
         rolesAndPermissions.getYdlRoles().forEach(role -> role.getYdlMenus().forEach(menu -> permissions.add(menu.getPath())));
-
-        redisTemplate.setObject(roleKey, roles, YdlConstants.TOKEN_EXPIRE);
-        redisTemplate.setObject(permissionKey, permissions, YdlConstants.TOKEN_EXPIRE);
-
 
         HashMap<String, Object> data = new HashMap<>();
 
