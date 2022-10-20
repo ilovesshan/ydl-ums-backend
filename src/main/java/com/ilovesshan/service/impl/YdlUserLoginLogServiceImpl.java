@@ -1,13 +1,13 @@
 package com.ilovesshan.service.impl;
 
 import com.ilovesshan.anotation.Log;
-import com.ilovesshan.pojo.YdlUserLoginLog;
 import com.ilovesshan.mapper.YdlUserLoginLogMapper;
+import com.ilovesshan.pojo.YdlUserLoginLog;
 import com.ilovesshan.service.YdlUserLoginLogService;
-import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
@@ -42,8 +42,8 @@ public class YdlUserLoginLogServiceImpl implements YdlUserLoginLogService {
      */
     @Override
     public Page<YdlUserLoginLog> queryByPage(YdlUserLoginLog ydlUserLoginLog, PageRequest pageRequest, String startTime, String endTime) {
-        long total = this.ydlUserLoginLogMapper.count(ydlUserLoginLog, startTime,endTime);
-        return new PageImpl<>(this.ydlUserLoginLogMapper.queryAllByLimit(ydlUserLoginLog, pageRequest,startTime,endTime ), pageRequest, total);
+        long total = this.ydlUserLoginLogMapper.count(ydlUserLoginLog, startTime, endTime);
+        return new PageImpl<>(this.ydlUserLoginLogMapper.queryAllByLimit(ydlUserLoginLog, pageRequest, startTime, endTime), pageRequest, total);
     }
 
     /**
@@ -80,7 +80,6 @@ public class YdlUserLoginLogServiceImpl implements YdlUserLoginLogService {
     public boolean deleteById(Long loginId) {
         return this.ydlUserLoginLogMapper.deleteById(loginId) > 0;
     }
-
 
 
     @Override

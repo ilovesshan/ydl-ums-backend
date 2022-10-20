@@ -94,6 +94,10 @@
             <mvc:exclude-mapping path="/**/*.jpeg"/>
             <bean class="com.ilovesshan.interceptor.AuthHandlerInterceptor"/>
         </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="com.ilovesshan.interceptor.RepeatRequestInterceptor"/>
+        </mvc:interceptor>
     </mvc:interceptors>
 
     <!--    配置 视图控制器-->
