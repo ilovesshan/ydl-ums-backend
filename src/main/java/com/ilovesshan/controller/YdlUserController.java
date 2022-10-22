@@ -46,7 +46,7 @@ public class YdlUserController {
      */
     @GetMapping("/{id}")
     public R queryById(@PathVariable("id") Long id) {
-        return R.success(R.SUCCESS_MESSAGE_select, this.ydlUserService.queryById(id));
+        return R.success(R.SUCCESS_MESSAGE_SELECT, this.ydlUserService.queryById(id));
     }
 
     /**
@@ -58,7 +58,7 @@ public class YdlUserController {
     @PostMapping
     public R add(@RequestBody YdlUser ydlUser) {
         YdlUser user = this.ydlUserService.insert(ydlUser);
-        return R.success(R.SUCCESS_MESSAGE_update, user);
+        return R.success(R.SUCCESS_MESSAGE_UPDATE, user);
     }
 
     /**
@@ -70,7 +70,7 @@ public class YdlUserController {
     @PutMapping
     public R edit(@RequestBody YdlUser ydlUser) {
         YdlUser user = this.ydlUserService.update(ydlUser);
-        return R.success(R.SUCCESS_MESSAGE_update, user);
+        return R.success(R.SUCCESS_MESSAGE_UPDATE, user);
     }
 
     /**

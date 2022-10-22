@@ -24,16 +24,16 @@ public class R {
     public static final int ERROR_CODE_SERVER = 500;
 
     public static final String SUCCESS_MESSAGE = "操作成功";
-    public static final String SUCCESS_MESSAGE_select = "查询成功";
-    public static final String SUCCESS_MESSAGE_insert = "新增成功";
-    public static final String SUCCESS_MESSAGE_delete = "删除成功";
-    public static final String SUCCESS_MESSAGE_update = "更新成功";
+    public static final String SUCCESS_MESSAGE_SELECT = "查询成功";
+    public static final String SUCCESS_MESSAGE_INSERT = "新增成功";
+    public static final String SUCCESS_MESSAGE_DELETE = "删除成功";
+    public static final String SUCCESS_MESSAGE_UPDATE = "更新成功";
 
     public static final String ERROR_MESSAGE = "操作失败";
-    public static final String ERROR_MESSAGE_select = "查询失败";
-    public static final String ERROR_MESSAGE_insert = "新增失败";
-    public static final String ERROR_MESSAGE_delete = "删除失败";
-    public static final String ERROR_MESSAGE_update = "更新失败";
+    public static final String ERROR_MESSAGE_SELECT = "查询失败";
+    public static final String ERROR_MESSAGE_INSERT = "新增失败";
+    public static final String ERROR_MESSAGE_DELETE = "删除失败";
+    public static final String ERROR_MESSAGE_UPDATE = "更新失败";
 
     private Integer code;
     private String message;
