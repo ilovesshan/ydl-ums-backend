@@ -19,6 +19,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public R handleException(Exception exception) {
+        exception.printStackTrace();
         return R.error(exception.getMessage(), null);
     }
 }
