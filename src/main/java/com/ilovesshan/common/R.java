@@ -1,4 +1,4 @@
-package com.ilovesshan.common;
+package com.ilovesshan.auth.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
  * Created with IntelliJ IDEA.
  *
  * @author: ilovesshan
- * @date: 2022/10/5
+ * @date: 2022/11/4
  * @description:
  */
 
@@ -43,7 +43,9 @@ public class R {
     public static R success() {
         return R.builder().code(R.SUCCESS_CODE).message(R.SUCCESS_MESSAGE).build();
     }
-
+    public static R success(String message) {
+        return R.builder().code(R.SUCCESS_CODE).message(message).build();
+    }
 
     public static R success(Object data) {
         return R.builder().code(R.SUCCESS_CODE).message(R.SUCCESS_MESSAGE).data(data).build();
@@ -57,6 +59,10 @@ public class R {
         return R.builder().code(R.ERROR_CODE_CLIENT).message(R.ERROR_MESSAGE).build();
     }
 
+    public static R fail(String message) {
+        return R.builder().code(R.ERROR_CODE_CLIENT).message(message).build();
+    }
+
     public static R fail(Object data) {
         return R.builder().code(R.ERROR_CODE_CLIENT).message(R.ERROR_MESSAGE).data(data).build();
     }
@@ -67,6 +73,10 @@ public class R {
 
     public static R error() {
         return R.builder().code(R.ERROR_CODE_SERVER).message(R.ERROR_MESSAGE).build();
+    }
+
+    public static R error(String message) {
+        return R.builder().code(R.ERROR_CODE_SERVER).message(message).build();
     }
 
     public static R error(Object data) {
